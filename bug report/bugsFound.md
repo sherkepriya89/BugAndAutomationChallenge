@@ -8,7 +8,7 @@ Below are the bugs found during testing:
 5. [No user feedback when First Name, Last Name, and Dependents are left blank](#bug-5-no-user-feedback-when-first-name-last-name-and-dependents-are-left-blank)
 6. [Special characters are allowed in the first and last name](#bug-6-special-characters-are-allowed-in-the-first-and-last-name-fields)
 7. [No error or notification displayed when user is logged out due to inactivity](#bug-7-no-error-or-notification-displayed-when-user-is-logged-out-due-to-inactivity)
-8. [First name and last name wrapped in \< and \> display as blank in Employees Table](#bug-8-first-name-and-last-name-wrapped-in--and--display-as-blank-in-employees-table)
+8. [First name and last name wrapped in < and > display as blank in Employees Table](#bug-8-first-name-and-last-name-wrapped-in--and--display-as-blank-in-employees-table)
 9. [No error message for decimals and non-numeric characters in dependents field](#bug-9-no-error-message-for-decimals-and-non-numeric-characters-in-dependents-field)
 10. [Pressing the Enter key on the keyboard does not trigger the Add button](#bug-10-pressing-the-enter-key-on-the-keyboard-does-not-trigger-the-add-button)
 11. [Clicking add button quickly multiple times adds duplicate employees](#bug-11-clicking-add-button-quickly-multiple-times-adds-duplicate-employees)
@@ -16,14 +16,15 @@ Below are the bugs found during testing:
 13. [Table border misaligns with table content after window resizing](#bug-13-table-border-misaligns-with-table-content-after-window-resizing)
 14. [Updating deleted record is possible and saves incorrect data (0 Salary and Gross Pay) when update and delete are performed in different tabs/browsers](#bug-14-updating-deleted-record-is-possible-and-saves-incorrect-data-0-salary-and-gross-pay-when-update-and-delete-are-performed-in-different-tabsbrowsers)
 15. [Cancel button color does not change when hovered over](#bug-15-cancel-button-color-does-not-change-when-hovered-over)
-16. [Putting incorrect username and password gives different page instead of showing errors](#bug-16-putting-incorrect-username-and-password-gives-different-page-instead-of-showing-errors)
-17. [No option to sort the users](#bug-17-no-option-to-sort-the-users)
-18. [There is no limit to logging attempts](#bug-18-there-is-no-limit-to-logging-attempts)
-19. [Cross site scripting is allowed in first and last name field](#bug-19-cross-site-scripting-is-allowed-in-first-and-last-name-field)
-20. [CSV injection is allowed in first and last name field](#bug-20-csv-injection-is-allowed-in-first-and-last-name-field)
+16. [Incorrect username and password submission leads to an HTTP ERROR 405 page instead of showing an error message](#bug-16-incorrect-username-and-password-submission-leads-to-an-http-error-405-page-instead-of-showing-an-error-message)
+17. [Missing option to sort users in employee table on Benefits Dashboard Page](#bug-17-missing-option-to-sort-users-in-employee-table-on-benefits-dashboard-page)
+18. [No limit on login attempts](#bug-18-no-limit-on-login-attempts)
+19. [Stored Cross-Site Scripting (XSS) allowed in first and last name fields](#bug-19-stored-cross-site-scripting-xss-allowed-in-first-and-last-name-fields)
+20. [CSV Injection allowed in First and Last Name fields](#bug-20-csv-injection-allowed-in-first-and-last-name-fields)
 21. [No error displayed when adding more than 50 characters in first and last name field](#bug-21-no-error-displayed-when-adding-more-than-50-characters-in-first-and-last-name-field)
 22. [No option to delete multiple records](#bug-22-no-option-to-delete-multiple-records)
-23. [No login button present, user has to use link to login](#bug-23-no-login-button-present-user-has-to-use-link-to-login)
+
+
 
 ---
 ## Bug 1: First Name and Last Name are incorrectly displayed
@@ -489,3 +490,216 @@ The "Cancel" button does not change color or provide any visual indication when 
 **Attachments:**
 
 ![](Bug15.gif)
+
+---
+## Bug 16: Incorrect username and password submission leads to an HTTP ERROR 405 page instead of showing an error message
+
+**Priority:** High
+
+**Description:**
+
+When a user enters an incorrect username and/or password on the login page, instead of displaying an error message indicating invalid credentials, the application redirects to an error page with the following message:
+
+“This page isn’t working. If the problem continues, contact the site owner. HTTP ERROR 405.”
+
+**Steps to Reproduce:**
+
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login.
+2. Enter an incorrect username and password.
+3. Click the "Login" button.
+
+**Expected Result:**
+
+The application should display a clear error message informing the user that the username and/or password is incorrect.
+
+**Actual Result:**
+
+The application redirects to an HTTP ERROR 405 page with the message: “This page isn’t working. If the problem continues, contact the site owner. HTTP ERROR 405.”
+
+**Attachments:**
+
+![](Bug16.gif)
+
+---
+## Bug 17: Missing option to sort users in employee table on Benefits Dashboard Page.
+
+**Priority:** Low
+
+**Description:**
+
+The employee table on the benefits dashboard page lacks a sorting option for users, making it difficult to organize or filter user data effectively.
+
+**Steps to Reproduce:**
+
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login.
+2. Log in with valid credentials.
+3. Observe there is no option to sort the users.
+
+**Expected Result:**
+
+The employee table should provide options to sort users based on columns
+
+**Actual Result:**
+
+No sorting options are available, leading to an unorganized display of users.
+
+**Attachments:**
+
+![](Bug17.gif)
+
+---
+## Bug 18: No limit on login attempts.
+
+**Priority:** High
+
+**Description:**
+
+The application currently allows unlimited login attempts, posing a security risk as it could be exploited for brute-force attacks.
+
+**Steps to Reproduce:**
+
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login.
+2. Enter incorrect username and password repeatedly.
+3. Continue attempting to log in without encountering any restriction or warning.
+
+**Expected Result:**
+
+After a certain number of failed login attempts (e.g., 3-5), the system should temporarily lock the account, present a CAPTCHA, or display a warning to prevent further attempts.
+
+**Actual Result:**
+
+The system allows continuous login attempts with no limit or protective measures.
+
+**Attachments:**
+
+![](Bug18.gif)
+
+---
+## Bug 19: Stored Cross-Site Scripting (XSS) allowed in first and last name fields.
+
+**Priority:** High
+
+**Description:**
+
+The application allows Stored Cross-Site Scripting (XSS) attacks via the First Name and Last Name fields, leading to potential security vulnerabilities.
+
+This occurs when the malicious code is saved on the server (e.g., in a database) and then served to other users when they load the page. In this case, the malicious code would be stored and executed whenever someone views the affected content.
+For example: <img src=asd onerror=alert(location)>
+In the given example, , the onerror attribute is used to trigger a JavaScript alert if the image fails to load (since src=asd is likely not a valid image URL). The alert(location) part executes JavaScript code that shows the current URL of the page, demonstrating how an attacker can exploit this vulnerability to execute arbitrary JavaScript in the user's browser.
+
+**Steps to Reproduce:**
+
+1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+2. Log in with valid credentials.
+3. Click on the "Add Employee" button.
+4. Enter <img src=asd onerror=alert(location)> in the First Name and Last Name fields.
+5. Enter a number less than 32 or more than 0 in the Dependents field.
+6. Click the "Add" button.
+7. Click Log out.
+8. Login again with valid credentials.
+9. An alert will popup twice (one for first name and one for last name).
+
+**Expected Result:**
+
+The application should sanitize and escape input fields to prevent any script execution. Malicious scripts should not be executed or stored.
+
+**Actual Result:**
+
+The application stores and executes the injected script, allowing XSS attacks via the First Name and Last Name fields.
+
+**Attachments:**
+
+![](Bug19.gif)
+
+---
+## Bug 20: CSV Injection allowed in First and Last Name fields.
+
+**Priority:** High
+
+**Description:**
+
+The application does not properly sanitize inputs for the First Name and Last Name fields, allowing CSV injection. This vulnerability occurs when a user can input data that gets interpreted as executable commands or formulas in CSV files. This can lead to potential security issues, such as arbitrary code execution or data manipulation when the data is exported to CSV format
+
+**Steps to Reproduce:**
+
+1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+2. Log in with valid credentials.
+3. Click on the "Add Employee" button.
+4. Enter `=HYPERLINK("https://google.com","click")` in the First Name and Last Name fields.
+6. Click the "Add" button.
+7. OCreate a CSV file from the employees table or copy the records into a CSV file.
+8. Open the CSV file and observe that the record shows "click" as a clickable link.
+
+**Expected Result:**
+
+The application should sanitize inputs to prevent CSV injection. The data entered into the First Name and Last Name fields should be treated as plain text and should not be executed or interpreted as commands or formulas in CSV files.
+
+**Actual Result:**
+
+The application allows CSV injection payloads to be entered into the First Name and Last Name fields. When the data is included in a CSV file, it can execute or manipulate data in unintended ways, such as displaying a clickable link.
+
+**Attachments:**
+
+![](Bug20.gif)
+
+---
+## Bug 21: No error displayed when adding more than 50 characters in first and last name field
+
+**Priority:** High
+
+**Description:**
+
+An error message on the front end when more than 50 characters are entered in the First Name or Last Name fields. Although the API call responds with an error indicating that the input is invalid, this error is not shown to the user on the front end. As a result, the record is not added to the employee table, and users receive no feedback on why their input was rejected.
+
+**Steps to Reproduce:**
+
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login
+2. Log in with valid credentials.
+3. Click on the "Add Employee" button.
+4. Enter a string with more than 50 characters (e.g., A very long name that exceeds fifty characters in length for testing purposes) in the First Name field.
+5. Enter a string with more than 50 characters in the Last Name field.
+6. Click the "Add" button.
+7. Observe that no error message is displayed and the record is added to the employee table.
+
+**Expected Result:**
+
+The application should display an error message on the front end indicating that the First Name and Last Name fields must not exceed 50 characters. 
+
+**Actual Result:**
+
+The record is not added to the employee table, and no error message is displayed to the user on the front end. The error is only visible in the API call response.
+
+**Attachments:**
+
+![](Bug21.gif)
+
+---
+## Bug 22: No option to Delete multiple records
+
+**Priority:** Medium
+
+**Description:**
+
+The application does not provide an option to delete multiple records at once from the employee table on the benefits dashboard page. Users can only delete individual records one by one, which is inefficient when needing to remove multiple records simultaneously. This lack of functionality can impact user productivity and increase the risk of errors when managing large datasets.
+
+**Steps to Reproduce:**
+
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login
+2. Log in with valid credentials.
+3. Observe the employee table listing multiple records.
+4. Attempt to select multiple records for deletion.
+5. Notice that there is no option to delete the selected records collectively.
+
+**Expected Result:**
+
+The application should provide an option to select and delete multiple records simultaneously from the employee table. This could be implemented via checkboxes to select records and a "Delete Selected" button.
+
+**Actual Result:**
+
+There is no option to delete multiple records at once. Users can only delete records individually.
+
+**Attachments:**
+
+![](Bug22.gif)
+
+---
