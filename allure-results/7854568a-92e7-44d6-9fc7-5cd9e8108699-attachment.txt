@@ -1,4 +1,0 @@
-Running beforeAll
-New employee ID: 6ecf643e-fd0d-4555-858d-9d6b82e2a397
-Running Verify the last name test
-Running afterAll
