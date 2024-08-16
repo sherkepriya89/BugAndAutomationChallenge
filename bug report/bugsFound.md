@@ -641,6 +641,7 @@ The application allows CSV injection payloads to be entered into the First Name 
 **Attachments:**
 
 ![](Bug20.gif)
+![](Bug20_1.gif)
 
 ---
 ## Bug 21: No error displayed when adding more than 50 characters in first and last name field
