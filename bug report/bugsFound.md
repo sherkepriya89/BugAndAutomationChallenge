@@ -1,7 +1,6 @@
-﻿# Benefits Dashboard UI Bugs Report
+﻿# Benefits Dashboard Bugs Report
 
-## Table of Contents
-## Table of Contents
+Below are the bugs found during testing:
 1. [First Name and Last Name are incorrectly displayed](#bug-1-first-name-and-last-name-are-incorrectly-displayed)
 2. [Employees table displays empty when developer tools are open and page is refreshed (Logout button disappears on second refresh)](#bug-2-employees-table-displays-empty-when-developer-tools-are-open-and-page-is-refreshed-logout-button-disappears-on-second-refresh)
 3. [No error displayed when adding more than 32 or less than 0 dependents (Form fails silently)](#bug-3-no-error-displayed-when-adding-more-than-32-or-less-than-0-dependents-form-fails-silently)
