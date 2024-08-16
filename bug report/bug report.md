@@ -4,11 +4,9 @@
 1. [First Name and Last Name are incorrectly displayed](#bug-1-first-name-and-last-name-are-incorrectly-displayed)
 2. [Employees Table Displays Empty When Developer Tools Are Open and Page is Refreshed](#bug-2-employees-table-displays-empty-when-developer-tools-are-open-and-page-is-refreshed-logout-button-disappears-on-second-refresh)
 3. [No Error Displayed When Adding More Than 32 or Less Than 0 Dependents (Form Fails Silently)](#bug-3-no-error-displayed-when-adding-more-than-32-or-less-than-0-dependents-form-fails-silently)
-4. [The benefits page can be accessed without username and password if the url is known](#the-benefits-page-can-be-accessed-without-username-and-password-if-the-url-is-known)
-5. [If developer tool is open, the dashboard page shows empty employees table](#if-developer-tool-is-open-the-dashboard-page-shows-empty-employees-table)
-6. [UI does not show any error when trying to add dependents more than 32 or less than 0](#ui-does-not-show-any-error-when-trying-to-add-dependents-more-than-32-or-less-than-0)
+4. [Benefits page accessible without authentication if URL is known](#the-benefits-page-can-be-accessed-without-username-and-password-if-the-url-is-known)
+5. [No user feedback when First Name, Last Name, and Dependents are left blank](#there-is-no-error-message-when-first-name-last-name-and-dependents-are-kept-blank)
 7. [All special characters are allowed in the first and last name](#all-special-characters-are-allowed-in-the-first-and-last-name)
-8. [There is no error message when first name last name and dependents are kept blank](#there-is-no-error-message-when-first-name-last-name-and-dependents-are-kept-blank)
 9. [If tried to add first and last name with <> it shows empty first and last name after saving](#if-tried-to-add-first-and-last-name-with-it-shows-empty-first-and-last-name-after-saving)
 10. [No error message for decimals, other characters in dependents field](#no-error-message-for-decimals-other-characters-in-dependents-field)
 11. [Clicking Enter or Return on mac should click the add button](#clicking-enter-or-return-on-mac-should-click-the-add-button)
@@ -114,4 +112,66 @@ The "Add" button does not trigger any action. The form remains unchanged, and no
 
 ---
 
-*Continue with the remaining bugs in a similar format...*
+## Bug 4: Benefits page accessible without authentication if URL is known
+
+**Priority:** High
+
+**Description:**
+
+The benefits page can be accessed directly if the URL is known, bypassing the authentication process. This issue allows unauthorized users to access benefits page without logging in.
+
+**Steps to Reproduce:**
+
+1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+2. Log in with valid credentials.
+3. Copy the benefits page link (<https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Benefits>)
+4. Click Log out.
+5. Paste the benefits page link in another tab.
+6. It does not ask for authentication and shows empty benefits table.
+
+**Expected Result:**
+
+The benefits page should require authentication (username and password) before granting access.
+Unauthorized users should not be able to access the benefits page even if they know the URL.
+
+**Actual Result:**
+
+The benefits page is accessible without authentication if the URL is known.
+
+**Attachments:**
+
+![](Bug4.gif)
+
+---
+
+## Bug 5: No user feedback when First Name, Last Name, and Dependents are left blank
+
+**Priority:** High
+
+**Description:**
+
+When the First Name, Last Name, and Dependents fields are left blank and the user clicks the "Add" button, the form does not proceed, and no user feedback is provided. The error is only visible upon inspecting the API call.
+
+**Steps to Reproduce:**
+
+1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+2. Log in with valid credentials.
+3. Click on the "Add Employee" button.
+4. Keep the First Name and Last Name and Dependants fields blank.
+6. Click the "Add" button.
+
+**Expected Result:**
+
+An error message should be displayed to the user indicating that the First Name, Last Name, and Dependents fields are required.
+The form should not be submitted and should provide immediate feedback when these fields are left blank.
+
+**Actual Result:**
+
+The form does not proceed and no error message is displayed to the user.
+The error is only visible in the API call response, which does not inform the user directly.
+
+**Attachments:**
+
+![](Bug5.gif)
+
+---

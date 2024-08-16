@@ -1,1 +1,0 @@
-Status code for post request should be 201 (created)
