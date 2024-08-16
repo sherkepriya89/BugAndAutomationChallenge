@@ -20,8 +20,7 @@ exports.AddEmployeePage = class AddEmployeePage {
 
     async verifyModalTitle(text) {
         await this.modalTitle.waitFor({ state: 'visible' });
-        console.log(this.modalTitle.textContent());
-        expect(await this.modalTitle).toHaveText(text);
+        await (expect(this.modalTitle).toHaveText(text));
     }
 
     async verifyModalIsHidden() {

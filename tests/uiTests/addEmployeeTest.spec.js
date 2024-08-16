@@ -9,7 +9,7 @@ let id;
 
 test.describe('Add Employee Test Suite', () => {
 
-    test.beforeEach(async ({ loginPage, dashboardPage }) => {
+    test.beforeEach(async ({ loginPage, dashboardPage, addEmployeePage }) => {
         await loginPage.goToLoginPage(process.env.URL);
         await loginPage.performLogin(process.env.USERNAME, process.env.PASSWORD);
         await dashboardPage.clickOnAddEmployeeButton();
@@ -55,7 +55,7 @@ test.describe('Add Employee Modal Test Suite', () => {
         await dashboardPage.clickOnAddEmployeeButton();
     });
 
-    test.only('Verify add employee modal title', async ({ addEmployeePage }) => {
+    test('Verify add employee modal title', async ({ addEmployeePage }) => {
         await addEmployeePage.verifyModalTitle("Add Employee");
     });
 
