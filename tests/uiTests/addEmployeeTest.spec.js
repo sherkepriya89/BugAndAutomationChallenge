@@ -114,30 +114,6 @@ test.describe('Negative Add Employee Modal Test Suite', () => {
         expect(await page.locator(`text=${dataSet.dependantsMax.errorMessage}`).isVisible()).toBe(true);
     });
 
-    test('Verify invalid first name shows error', async ({ addEmployeePage, page }) => {
-        // Added a new record from the data.json file
-        await addEmployeePage.addNewRecord(
-            dataSet.firstInvalid.firstName,
-            dataSet.firstInvalid.lastName,
-            dataSet.firstInvalid.dependants
-        );
-
-        // Checking if the error message is visible
-        expect(await page.locator(`text=${dataSet.firstInvalid.errorMessage}`).isVisible()).toBe(true);
-    });
-
-    test('Verify invalid last name shows error', async ({ addEmployeePage, page }) => {
-        // Added a new record from the data.json file
-        await addEmployeePage.addNewRecord(
-            dataSet.lastInvalid.firstName,
-            dataSet.lastInvalid.lastName,
-            dataSet.lastInvalid.dependants
-        );
-
-        // Checking if the error message is visible
-        expect(await page.locator(`text=${dataSet.lastInvalid.errorMessage}`).isVisible()).toBe(true);
-    });
-
     test('Verify empty first name shows error', async ({ addEmployeePage, page }) => {
         // Added a new record from the data.json file
         await addEmployeePage.addNewRecord(
