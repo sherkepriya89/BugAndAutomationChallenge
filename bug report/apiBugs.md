@@ -1,300 +1,226 @@
-﻿# Benefits Dashboard UI Bugs Report
+﻿# Benefits Dashboard Bugs Report
 
-## Table of Contents
-1. [First Name and Last Name are incorrectly displayed](#bug-1-first-name-and-last-name-are-incorrectly-displayed)
-2. [Employees table displays empty when developer tools are open and page is refreshed (Logout button disappears on second refresh)](#bug-2-employees-table-displays-empty-when-developer-tools-are-open-and-page-is-refreshed-logout-button-disappears-on-second-refresh)
-3. [No error displayed when adding more than 32 or less than 0 dependents (Form fails silently)](#bug-3-no-error-displayed-when-adding-more-than-32-or-less-than-0-dependents-form-fails-silently)
-4. [Benefits page accessible without authentication if URL is known](#bug-benefits-page-accessible-without-authentication-if-url-is-known)
-5. [No user feedback when First Name, Last Name, and Dependents are left blank](#bug-no-user-feedback-when-first-name-last-name-and-dependents-are-left-blank)
-6. [Special characters are allowed in the first and last name](#all-special-characters-are-allowed-in-the-first-and-last-name)
-7. [When user is logged out due to inactivity it does not show any error until looked at the api call](#if-tried-to-add-first-and-last-name-with-it-shows-empty-first-and-last-name-after-saving)
-8. [First name and last name wrapped in < and > display as blank in Employees Table](#if-tried-to-add-first-and-last-name-with-it-shows-empty-first-and-last-name-after-saving)
-9. [No error message for decimals and non-numeric characters in dependents field](#no-error-message-for-decimals-other-characters-in-dependents-field)
-9. [Clicking Enter or Return on mac should click the add button](#clicking-enter-or-return-on-mac-should-click-the-add-button)
-10. [Clicking add button quickly multiple times adds the employees multiple times](#clicking-add-button-quickly-multiple-times-adds-the-employees-multiple-times)
-11. [Edit Employee window says Add Employee](#edit-employee-window-says-add-employee)
-12. [Resizing the window does not resize the table border](#resizing-the-window-does-not-resize-the-table-border)
-13. [If the application is open in two browser, if you update the name in one browser and dependents in other, the update is not displayed correctly on firefox even after it is refreshed](#if-the-application-is-open-in-two-browser-if-you-update-the-name-in-one-browser-and-dependents-in-other-the-update-is-not-displayed-correctly-on-firefox-even-after-it-is-refreshed)
-14. [Cancel button color does not change when hovered over](#cancel-button-color-does-not-change-when-hovered-over)
-15. [Putting incorrect username and password gives different page instead of showing errors](#putting-incorrect-username-and-password-gives-different-page-instead-of-showing-errors)
-16. [No option to sort the users](#no-option-to-sort-the-users)
-17. [There is no limit to logging attempts](#there-is-no-limit-to-logging-attempts)
-
+Below are the bugs found during API testing:
+1. [GET and DELETE with non-existing id gives 200 status code and empty response body](#bug-1-get-and-delete-with-non-existing-id-gives-200-status-code-and-empty-response-body)
+2. [PUT is allowed on the deleted record and salary turns to 0](#bug-2-put-request-allowed-on-deleted-record-resulting-in-salary-is-set-to-0)
+3. [SALARY can be changed with PUT request](#bug-3-salary-can-be-changed-with-put-request)
+4. [GET with invalid id gives 500 status code instead of 400](#bug-4-get-with-invalid-id-gives-500-status-code-instead-of-400)
+5. [Expiration date allowed in POST requests](#bug-5-expiration-date-allowed-in-post-requests)
+6. [Expiration date allowed in PUT requests](#bug-6-expiration-date-allowed-in-put-requests)
+7. [Dependents is misspelled in JSON response](#bug-7-dependents-is-misspelled-in-json-response)
 ---
-
-## Bug 1: First Name and Last Name are incorrectly displayed
+## Bug 1: GET and DELETE with non-existing id gives 200 status code and empty response body.
 
 **Priority:** High
 
 **Description:**
-
-The first name and last name are reversed in the employee table. The first name shows under last name column and last name shows under first name.
+When sending GET or DELETE requests with a non-existing employee ID, the API returns a 200 status code and an empty response body. The expected behavior is a 404 status code indicating that the resource was not found.
 
 **Steps to reproduce:**
 
-1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
-2. Log in with valid credentials.
-3. Click on "Add Employee" button.
-4. Fill in First Name, Last Name, and Dependants.
-5. Click "Add" button.
+1. Send a POST request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees
+2. Add headers - "Content-Type": "application/json" and "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+3. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 23
+    }
+4. Save id from the response body.
+5. Send a DELETE request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}} (replace {{id}} with the saved ID from step 4).
+6. Add headers - "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+7. Send the request.
+8. Send a GET request to the same endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}}.
+9. Add the same headers as above.
 
-**Expected result:** The Employee table should display data accurately, with each column's content matching its respective header.
+**Expected result:** The GET and DELETE requests should return a 404 status code and an error message indicating that the employee with the provided ID does not exist.
 
-**Actual result:** The First Name and Last Name columns are swapped. The "First Name" column contains the Last Name, and the "Last Name" column contains the First Name.
+**Actual result:** The GET and DELETE requests return a 200 status code with an empty response body.
 
 **Attachments:**
 
-![](Bug1.gif)
+![](APIBug1.gif)
 
 ---
-
-## Bug 2: Employees table displays empty when developer tools are open and page is refreshed (Logout button disappears on second refresh)
+## Bug 2: PUT Request Allowed on Deleted Record, Resulting in Salary is Set to 0
 
 **Priority:** High
 
 **Description:**
+When a PUT request is sent to update a deleted employee record, the API allows the update, and the employee's salary is incorrectly set to 0. The expected behavior is for the request to return a 404 status code indicating that the record no longer exists.
 
-When the browser's developer tools are open and the dashboard page is refreshed, the Employees table appears empty even if there are employees added. Additionally, refreshing the page a second time causes the logout button to disappear.
+**Steps to reproduce:**
 
-**Steps to Reproduce:**
+1. Send a POST request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees.
+2. Add headers - "Content-Type": "application/json" and "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+3. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 23
+    }
+4. Save id from the response body.
+5. Send a DELETE request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}} (replace {{id}} with the saved ID from step 4).
+6. Add headers - "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+7. Send the request.
+8. Send a PUT request to the same endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}}.
+9. Add headers - "Authorization": "Basic VVGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+10. Send the request.
 
-1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
-2. Log in with valid credentials.
-3. Open the browser's developer tools by right-clicking and clicking Inspect.
-4. Refresh the dashboard page.
-5. Observe the Employees table.
-6. Refresh the page again.
-7. Observe the disappearance of the logout button.
+**Expected result:** The PUT request should return a 404 status code and an error message indicating that the record does not exist because it has been deleted.
 
-**Expected Result:**
-
-- The Employees table should display all employee records as expected, regardless of whether the developer tools are open, or the page is refreshed.
-- The logout button should remain visible after refreshing the page.
-
-**Actual Result:**
-
-- The Employees table is empty when the page is refreshed with the developer tools open, even though employees have been added.
-- Refreshing the page a second time causes the logout button to disappear.
+**Actual result:** The PUT request is allowed, and the employee's salary is incorrectly reset to 0 in the response.
 
 **Attachments:**
 
-![](Bug2.gif)
+![](APIBug2.gif)
 
 ---
-
-## Bug 3: No Error Displayed When Adding More Than 32 or Less Than 0 Dependents (Form Fails Silently)
+## Bug 3: Salary can be changed with PUT Request.
 
 **Priority:** High
 
 **Description:**
+The salary value, which is supposed to be 52000 based on predefined rules, can be manually changed through a PUT request. 
 
-The UI does not show any error or validation message when attempting to add more than 32 or less than 0 dependents while adding a new employee. The form fails silently after clicking the "Add" button, leaving the user confused as no feedback is provided. The issue is only noticeable when checking the API call.
+**Steps to reproduce:**
 
-**Steps to Reproduce:**
+1. Send a POST request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees.
+2. Add headers - "Content-Type": "application/json" and "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+3. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 23
+    }
+4. Save id from the response body.
+5. Send a PUT request to the same endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}}.
+6. Add headers - "Authorization": "Basic VVGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+7. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 5,
+    "salary": 87000,
+    }
+8. Send the request.
 
-1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
-2. Log in with valid credentials.
-3. Click on the "Add Employee" button.
-4. Fill in the First Name and Last Name fields.
-5. Enter a number greater than 32 or less than 0 in the Dependents field.
-6. Click the "Add" button.
+**Expected result:** The salary field should be immutable and should not be altered by a direct PUT request. Any attempt to update the salary should be ignored or result in an error response.
 
-**Expected Result:**
-
-The system should display an error message indicating that the number of dependents must be between 0 and 32. The user should receive clear feedback when the input is invalid.
-
-**Actual Result:**
-
-The "Add" button does not trigger any action. The form remains unchanged, and no error or validation message is shown. The user is left unsure of what went wrong until inspecting the API call.
+**Actual result:** The salary is successfully updated to the value provided in the PUT request, overriding the predefined rules.
 
 **Attachments:**
 
-![](Bug3.gif)
+![](APIBug3.gif)
 
 ---
-
-## Bug 4: Benefits page accessible without authentication if URL is known
+## Bug 4: GET with invalid id gives 500 status code instead of 400.
 
 **Priority:** High
 
 **Description:**
+The salary value, which is supposed to be 52000 based on predefined rules, can be manually changed through a PUT request. 
 
-The benefits page can be accessed directly if the URL is known, bypassing the authentication process. This issue allows unauthorized users to access benefits page without logging in.
+**Steps to reproduce:**
 
-**Steps to Reproduce:**
+1. Send a GET request to retrieve an employee using an invalid ID: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/6gvfygh.
+2. Add header - "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+3. Send the request.
 
-1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
-2. Log in with valid credentials.
-3. Copy the benefits page link (<https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Benefits>)
-4. Click Log out.
-5. Paste the benefits page link in another tab.
-6. It does not ask for authentication and shows empty benefits table.
+**Expected result:** The API should return a 400 status code with an appropriate error message indicating that the ID is invalid or does not exist.
 
-**Expected Result:**
-
-The benefits page should require authentication (username and password) before granting access.
-Unauthorized users should not be able to access the benefits page even if they know the URL.
-
-**Actual Result:**
-
-The benefits page is accessible without authentication if the URL is known.
+**Actual result:** The API returns a 500 status code, which indicates a server error rather than a client error, leading to confusion about the actual issue.
 
 **Attachments:**
 
-![](Bug4.gif)
+![](APIBug4.gif)
 
 ---
-
-## Bug 5: No user feedback when First Name, Last Name, and Dependents are left blank
+## Bug 5: Expiration date allowed in POST requests.
 
 **Priority:** High
 
 **Description:**
+The salary value, which is supposed to be 52000 based on predefined rules, can be manually changed through a PUT request. 
 
-When the First Name, Last Name, and Dependents fields are left blank and the user clicks the "Add" button, the form does not proceed, and no user feedback is provided. The error is only visible upon inspecting the API call.
+**Steps to reproduce:**
 
-**Steps to Reproduce:**
+1. Send a POST request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees.
+2. Add headers - "Content-Type": "application/json" and "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+3. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 23,
+    "expiration":"2023-10-20T10:59:36+00:00"
+    }
+4. Send the request.
 
-1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
-2. Log in with valid credentials.
-3. Click on the "Add Employee" button.
-4. Keep the First Name and Last Name and Dependants fields blank.
-6. Click the "Add" button.
+**Expected result:** The request should be rejected or the expiration field should be ignored.
 
-**Expected Result:**
-
-An error message should be displayed to the user indicating that the First Name, Last Name, and Dependents fields are required.
-The form should not be submitted and should provide immediate feedback when these fields are left blank.
-
-**Actual Result:**
-
-The form does not proceed and no error message is displayed to the user.
-The error is only visible in the API call response, which does not inform the user directly.
+**Actual result:** The expiration field successfully creates a new record with this field included.
 
 **Attachments:**
 
-![](Bug5.gif)
+![](APIBug5.gif)
 
 ---
-## Bug 6: Special characters are allowed in the first and last name fields.
+## Bug 6: Expiration date allowed in PUT requests..
 
 **Priority:** High
 
 **Description:**
+The expiration field is incorrectly modifiable through a PUT request, even though it should be immutable.
 
-When special charactersare allowed in the First Name and Last Name fields.
+**Steps to reproduce:**
 
-**Steps to Reproduce:**
+1. Send a GET request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees.
+2. Add headers - "Content-Type": "application/json" and "Authorization": "Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+3. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 23
+    }
+4. Send the Request.
+4. Save id from the response body.
+5. Send a PUT request to the same endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}}.
+6. Add headers - "Authorization": "Basic VVGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp"
+7. Add the following JSON object to the request body:
+  {
+    "firstName": "Priya",
+    "lastName": "Sherke",
+    "dependants": 5,
+    "expiration": 2021-10-20T10:59:36+00:00
+    }
+8. Send the request.
 
-1. Navigate to https://your-app-url.com/form-submission
-2. Log in with valid credentials (if required).
-3. Click on the "Add Employee" button (or equivalent).
-4. Enter special characters (e.g., @, #, $, %, ^, &, *, !) and numbers (e.g., 123) in the First Name field.
-5. Enter special characters and numbers in the Last Name field.
-6. Click the "Add" button to submit the form.
+**Expected result:** The expiration field should be immutable and should not be alterable by a PUT request. Any attempt to update this field should be ignored or result in an error response.
 
-**Expected Result:**
-
-The First Name and Last Name fields should only accept alphanumeric characters.
-An error message should be displayed to the user if special characters are entered.
-The form should not be submitted until valid data is provided.
-
-**Actual Result:**
-
-The form accepts special characters in the First Name and Last Name fields.
+**Actual result:** The expiration field is successfully updated through the PUT request.
 
 **Attachments:**
 
-![](Bug6.gif)
+![](APIBug6.gif)
 
 ---
-## Bug 7: No error or notification displayed when user is logged out due to inactivity.
+## Bug 7: Dependents is mispelled in JSON response.
 
-**Priority:** High
+**Priority:** Medium
 
 **Description:**
+The field "dependents" is misspelled in the JSON response from the API. It is incorrectly displayed as "dependants."
 
-When a user is logged out due to inactivity, no error message or notification is displayed to inform the user of their logged-out status. The issue is only evident by inspecting the API call, which returns an "unauthorized" error indicating that the session has expired.
+**Steps to reproduce:**
 
-**Steps to Reproduce:**
+1. Send a GET request to the endpoint: https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{{id}}.
+2. Add the necessary headers, if required.
+3. Observe the JSON response.
 
-1. Navigate to https://your-app-url.com/form-submission
-2. Log in with valid credentials (if required).
-3. Leave the application inactive for a period longer than the session timeout duration.
-4. Attempt to perform any action that requires authentication.
-5. Observe that no error message or notification is displayed to indicate that the user session has expired.
-6. Inspect the API call to see the "unauthorized" error response indicating that the session has expired or the user is no longer authenticated.
+**Expected result:** The field name should be "dependents."
 
-**Expected Result:**
-
-The user should receive an error message or notification indicating that they have been logged out due to inactivity.
-The application should prompt the user to log in again
-
-**Actual Result:**
-
-No error message or notification is displayed to the user when they are logged out due to inactivity.
-The "unauthorized" error is only visible through the API call, indicating that the session has expired or the user is no longer authenticated.
+**Actual result:** The field name is incorrectly spelled as "dependants."
 
 **Attachments:**
 
-![](Bug7.gif)
-
----
-## Bug 8: First name and last name wrapped in < and > display as blank in Employees Table.
-
-**Priority:** High
-
-**Description:**
-
-When attempting to add First Name and Last Name fields wrapped in < and > , these fields appear empty in the Employees table after saving. 
-
-**Steps to Reproduce:**
-
-1. Navigate to https://your-app-url.com/form-submission
-2. Log in with valid credentials (if required).
-3. Click on the "Add Employee" button (or equivalent).
-4. Enter any text wrapped in <> (ex. <Test>) in the First Name field.
-5. Enter any text wrapped in <> (ex. <User>) in the Last Name field.
-6. Click the "Add" button to submit the form.
-
-**Expected Result:**
-
-The Employees table should display the First Name and Last Name correctly, including characters like < and >.
-
-**Actual Result:**
-
-The Employees table displays the First Name and Last Name fields as empty when names are entered with < and >.
-
-**Attachments:**
-
-![](Bug8.gif)
-
----
-## Bug 9: No error message for decimals and non-numeric characters in dependents field.
-
-**Priority:** High
-
-**Description:**
-
-When attempting to add First Name and Last Name fields wrapped in < and > , these fields appear empty in the Employees table after saving. 
-
-**Steps to Reproduce:**
-
-1. Navigate to https://your-app-url.com/form-submission
-2. Log in with valid credentials (if required).
-3. Click on the "Add Employee" button (or equivalent).
-4. Enter any text wrapped in <> (ex. <Test>) in the First Name field.
-5. Enter any text wrapped in <> (ex. <User>) in the Last Name field.
-6. Click the "Add" button to submit the form.
-
-**Expected Result:**
-
-The Employees table should display the First Name and Last Name correctly, including characters like < and >.
-
-**Actual Result:**
-
-The Employees table displays the First Name and Last Name fields as empty when names are entered with < and >.
-
-**Attachments:**
-
-![](Bug8.gif)
+![](APIBug7.png)
