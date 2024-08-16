@@ -1,19 +1,25 @@
 const { expect } = require('@playwright/test');
 
-exports.AddEmployeePage = class AddEmployeePage {
+exports.UpdateRecordPage = class UpdateRecordPage {
     constructor(page) {
         this.page = page;
         this.modal = page.locator('div.modal-content:has-text("Add Employee")');
+        this.modalTitle = this.modal.locator('.modal-title');
         this.firstName = page.locator("#firstName");
         this.lastName = page.locator("#lastName");
-        this.dependents = page.locator("#dependants");
-        this.addButton = this.modal.locator("#updateEmployee");
+        this.dependants = page.locator("#dependants");
+        this.updateButton = this.modal.locator("#updateEmployee");
         this.cancelButton = this.modal.locator('button:has-text("Cancel")');
         this.closeButton = page.locator(".close");
     }
 
     async verifyModalIsVisible() {
         await expect(this.modal).toBeVisible();
+    }
+
+    async verifyModalTitle(text) {
+        await this.modalTitle.waitFor({ state: 'visible' });
+        await (expect(this.modalTitle).toHaveText(text));
     }
 
     async verifyModalIsHidden() {
@@ -33,7 +39,7 @@ exports.AddEmployeePage = class AddEmployeePage {
     }
 
     async updateEmployee() {
-        await this.updateButton.click();
+        await this.updateButton.click({ force: true });
     }
 
     async clickCancel() {
@@ -47,8 +53,21 @@ exports.AddEmployeePage = class AddEmployeePage {
     async updateRecord(firstname, lastname, dependants) {
         await this.enterFirstname(firstname);
         await this.enterLastname(lastname);
-        await this.enterDependents(dependants);
+        await this.enterDependants(dependants);
         await this.updateEmployee();
+
+    }
+    async verifyCloseButton() {
+        await this.verifyModalIsVisible();
+        await this.clickCancel();
+        await this.verifyModalIsHidden();
+
+    }
+
+    async verifyCancelButton() {
+        await this.verifyModalIsVisible();
+        await this.clickClose();
+        await this.verifyModalIsHidden();
 
     }
 }

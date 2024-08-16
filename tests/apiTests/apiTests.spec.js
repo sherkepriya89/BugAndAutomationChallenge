@@ -1,169 +1,130 @@
 const { test, expect } = require('@playwright/test');
+require('dotenv').config();
 
-test.describe('Employee API Test Suite', () => {
-    const baseURL = 'https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees';
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic VGVzdFVzZXI0MTk6TnokcGx7fSQ2MXNp', // Replace {{token}} with the actual token or use environment variables.
-    };
+let employeeId;
+const requestBody = {
+    firstName: "Priya",
+    lastName: "Sherke",
+    dependants: 10
+};
+const baseUrl = `${process.env.API_URL}/employees`;
+const headers = {
+    'Authorization': `Basic ${process.env.TOKEN}`,
+    'Content-Type': 'application/json'
+};
 
-    // GET Request: Get All Employees
-    test('Get All Employees', async ({ request }) => {
-        const response = await request.get(baseURL, { headers });
 
-        // Assertions
+// Before each test, ensure we have an employee ID
+test.beforeEach(async ({ request }) => {
+    if (!employeeId) {
+        const response = await request.post(baseUrl, { data: requestBody, headers });
+        const responseBody = await response.json();
+        employeeId = responseBody.id;
+    }
+});
+
+// Test Suite for API Status Code
+test.describe('API Status Code Test Suite', () => {
+    test('Get employee list', async ({ request }) => {
+        const response = await request.get(baseUrl, { headers });
         expect(response.status()).toBe(200);
-        const responseBody = await response.json();
-        expect(Array.isArray(responseBody)).toBeTruthy();
     });
 
-    // GET Request: Get Employee by ID
-    test('Get Employee by ID', async ({ request }) => {
-        const employeeId = `1731b4ed-b36b-474d-8c05-1a0eb9bc661c`; // Set a valid employee ID
-        const response = await request.get(`${baseURL}/${employeeId}`, { headers });
-
-        // Assertions
-        expect(response.status()).toBe(200);
-        const responseBody = await response.json();
-        expect(responseBody).toHaveProperty('id', employeeId);
-        expect(responseBody).toHaveProperty('firstName');
-        expect(responseBody).toHaveProperty('lastName');
+    test('Verify create employee status code', async ({ request }) => {
+        const response = await request.post(baseUrl, { data: requestBody, headers });
+        expect(response.status()).toBe(201); // Status code for successful creation
     });
 
-    // POST Request: Add New Employee
-    test('Add New Employee', async ({ request }) => {
-        const response = await request.post(baseURL, {
-            headers,
-            data: {
-                firstName: 'John',
-                lastName: 'Doe',
-                dependants: 3
-            },
-        });
-
-        // Assertions
-        expect(response.status()).toBe(201);
-        const responseBody = await response.json();
-        expect(responseBody).toHaveProperty('id');
-        expect(responseBody.firstName).toBe('John');
-        expect(responseBody.lastName).toBe('Doe');
-        expect(responseBody.dependants).toBe(3);
-    });
-
-    // POST Request: Add Employee - Invalid Data
-    test('Add Employee - Invalid Data', async ({ request }) => {
-        const response = await request.post(baseURL, {
-            headers,
-            data: {
-                firstName: '', // Invalid first name
-                lastName: 'Doe',
-                dependants: 3
-            },
-        });
-
-        // Assertions
-        expect(response.status()).toBe(400); // Expecting a Bad Request due to invalid data
-        const responseBody = await response.json();
-        expect(responseBody.message).toContain('FirstName is required');
-    });
-
-    // DELETE Request: Delete Employee by ID
-    test('Delete Employee by ID', async ({ request }) => {
-        const employeeId = 1; // Set a valid employee ID
-        const response = await request.delete(`${baseURL}/${employeeId}`, { headers });
-
-        // Assertions
-        expect(response.status()).toBe(204); // Expecting No Content status on successful deletion
-    });
-
-    // DELETE Request: Delete Employee with Invalid ID
-    test('Delete Employee - Invalid ID', async ({ request }) => {
-        const invalidEmployeeId = 99999; // Set an invalid employee ID
-        const response = await request.delete(`${baseURL}/${invalidEmployeeId}`, { headers });
-
-        // Assertions
-        expect(response.status()).toBe(404); // Expecting Not Found status for invalid ID
-        const responseBody = await response.json();
-        expect(responseBody.message).toContain('Employee not found');
-    });
-
-    const { test, expect, request } = require('@playwright/test');
-
-    test.describe('Employee API Tests', () => {
-
-        const baseURL = 'https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees';
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic {{token}}',  // Replace {{token}} with the actual token or use environment variables.
+    test('Update employee details', async ({ request }) => {
+        const updatedData = {
+            id: employeeId,
+            firstName: "New",
+            lastName: "User Edit"
         };
-
-        // Test Case: Add Employee with Invalid Last Name
-        test('Add Employee - Invalid lastName', async ({ request }) => {
-            const response = await request.post(baseURL, {
-                headers,
-                data: {
-                    "firstName": "New",
-                    "lastName": "Employee The field LastName must be a string with a maximum length of 50",
-                    "dependants": 7
-                },
-            });
-
-            // Assertions
-            expect(response.status()).toBe(400);
-            const responseBody = await response.json();
-            expect(responseBody.message).toContain('LastName must be a string with a maximum length of 50');
-        });
-
-        // Test Case: Add Employee with Invalid First Name
-        test('Add Employee - Invalid firstName', async ({ request }) => {
-            const response = await request.post(baseURL, {
-                headers,
-                data: {
-                    "firstName": "New - The field FirstName must be a string with a maximum length of 50",
-                    "lastName": "Employee",
-                    "dependants": 7
-                },
-            });
-
-            // Assertions
-            expect(response.status()).toBe(400);
-            const responseBody = await response.json();
-            expect(responseBody.message).toContain('FirstName must be a string with a maximum length of 50');
-        });
-
-        // Test Case: Add Employee with Invalid Dependants
-        test('Add Employee - Invalid dependants', async ({ request }) => {
-            const response = await request.post(baseURL, {
-                headers,
-                data: {
-                    "firstName": "New",
-                    "lastName": "Employee",
-                    "dependants": "abc"
-                },
-            });
-
-            // Assertions
-            expect(response.status()).toBe(400);
-            const responseBody = await response.json();
-            expect(responseBody.message).toContain('Dependants must be a valid number');
-        });
-
-        // Test Case: Add Employee with Excessive Dependants
-        test('Add Employee - Invalid dependants Num', async ({ request }) => {
-            const response = await request.post(baseURL, {
-                headers,
-                data: {
-                    "firstName": "New",
-                    "lastName": "Employee",
-                    "dependants": 33
-                },
-            });
-
-            // Assertions
-            expect(response.status()).toBe(400);
-            const responseBody = await response.json();
-            expect(responseBody.message).toContain('Dependants must be within allowed range');
-        });
+        const response = await request.post(baseUrl, { data: updatedData, headers });
+        expect(response.status()).toBe(200);
     });
 
+    test('Get specific employee by ID', async ({ request }) => {
+        const response = await request.get(`${baseUrl}/${employeeId}`, { headers });
+        expect(response.status()).toBe(200);
+    });
+
+    test('Delete specific employee by ID', async ({ request }) => {
+        const response = await request.delete(`${baseUrl}/${employeeId}`, { headers });
+        expect(response.status()).toBe(200);
+    });
+});
+
+// Test Suite for API Response Validation
+test.describe('API Response Validation Test Suite', () => {
+    test('Get employee list', async ({ request }) => {
+        const response = await request.get(baseUrl, { headers });
+        const employees = await response.json();
+        expect(Array.isArray(employees)).toBeTruthy();
+        expect(employees.length).toBeGreaterThan(0);
+    });
+
+    test('Create employee and save ID from response', async ({ request }) => {
+        const response = await request.post(baseUrl, { data: requestBody, headers });
+        const responseBody = await response.json();
+        employeeId = responseBody.id;
+        expect(responseBody).toHaveProperty('id');
+    });
+
+    test('Update employee details', async ({ request }) => {
+        const updatedData = {
+            id: employeeId,
+            firstName: "User",
+            lastName: "Edit"
+        };
+        const response = await request.post(baseUrl, { data: updatedData, headers });
+        const responseBody = await response.json();
+        expect(responseBody).toHaveProperty('firstName', updatedData.firstName);
+        expect(responseBody).toHaveProperty('lastName', updatedData.lastName);
+    });
+
+    test('Get specific employee by ID', async ({ request }) => {
+        const response = await request.get(`${baseUrl}/${employeeId}`, { headers });
+        const employee = await response.json();
+        expect(employee).toHaveProperty('id', employeeId);
+        expect(employee).toHaveProperty('firstName');
+        expect(employee).toHaveProperty('lastName');
+    });
+
+    test('Delete specific employee by ID', async ({ request }) => {
+        const response = await request.delete(`${baseUrl}/${employeeId}`, { headers });
+        const responseBody = await response.text();
+        expect(responseBody).toBe('');
+    });
+});
+
+// Test Suite for API Negative Scenarios
+test.describe('API Negative Test Suite', () => {
+    test('Get employee with invalid ID', async ({ request }) => {
+        const invalidEmployeeId = crypto.randomUUID(); // Generating a random UUID
+        const response = await request.get(`${baseUrl}/${invalidEmployeeId}`, { headers });
+        expect(response.status()).toBe(404);
+        const errorResponse = await response.json();
+        expect(errorResponse).toHaveProperty('errorMessage');
+    });
+
+    test('Update employee with invalid ID', async ({ request }) => {
+        const invalidEmployeeId = crypto.randomUUID();
+        const updatedData = {
+            id: invalidEmployeeId,
+            firstName: "New",
+            lastName: "User Edit"
+        };
+        const response = await request.post(baseUrl, { data: updatedData, headers });
+        expect(response.status()).toBe(400);
+    });
+
+    test('Delete employee with invalid ID', async ({ request }) => {
+        const invalidEmployeeId = crypto.randomUUID();
+        const response = await request.delete(`${baseUrl}/${invalidEmployeeId}`, { headers });
+        expect(response.status()).toBe(400);
+        const responseBody = await response.text();
+        expect(responseBody).toBe('');
+    });
 });

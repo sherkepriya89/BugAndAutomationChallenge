@@ -7,17 +7,15 @@ exports.AddEmployeePage = class AddEmployeePage {
         this.modalTitle = this.modal.locator('.modal-title');
         this.firstName = page.locator("#firstName");
         this.lastName = page.locator("#lastName");
-        this.dependents = page.locator("#dependants");
+        this.dependants = page.locator("#dependants");
         this.addButton = this.modal.locator("#addEmployee");
         this.cancelButton = this.modal.locator('button:has-text("Cancel")');
-        this.closeButton = page.locator(".close");
+        this.closeButton = this.modal.locator(".close");
     }
 
     async verifyModalIsVisible() {
         await expect(this.modal).toBeVisible();
     }
-
-
     async verifyModalTitle(text) {
         await this.modalTitle.waitFor({ state: 'visible' });
         await (expect(this.modalTitle).toHaveText(text));
@@ -35,8 +33,8 @@ exports.AddEmployeePage = class AddEmployeePage {
         await this.lastName.fill(lastName);
     }
 
-    async enterDependents(dependents) {
-        await this.dependents.fill(dependents.toString());
+    async enterDependants(dependants) {
+        await this.dependants.fill(dependants.toString());
     }
 
     async addEmployee() {
@@ -51,12 +49,27 @@ exports.AddEmployeePage = class AddEmployeePage {
         await this.closeButton.click();
     }
 
-    async addNewRecord(firstname, lastname, dependents) {
+    async addNewRecord(firstname, lastname, dependants) {
         await this.verifyModalIsVisible();
         await this.enterFirstname(firstname);
         await this.enterLastname(lastname);
-        await this.enterDependents(dependents);
+        await this.enterDependants(dependants);
         await this.addEmployee();
 
     }
+
+    async verifyCloseButton() {
+        await this.verifyModalIsVisible();
+        await this.clickCancel();
+        await this.verifyModalIsHidden();
+
+    }
+
+    async verifyCancelButton() {
+        await this.verifyModalIsVisible();
+        await this.clickClose();
+        await this.verifyModalIsHidden();
+
+    }
+
 }

@@ -27,83 +27,78 @@ exports.DashboardPage = class DashboardPage {
     }
 
     async getNewRecordID(name) {
-        const tableRow = this.table.locator('tr', { hasText: name });
-        const id = await (tableRow.locator('td').nth(0)).textContent();
-        return id;
+        return this.table.locator('tr', { hasText: name }).locator('td').nth(0).textContent();
+    }
+
+    async checkNewRecordField(id, index, expectedText) {
+        const tableRow = this.table.locator('tr', { hasText: id });
+        await expect(tableRow.locator('td').nth(index)).toHaveText(expectedText);
     }
 
     async checkNewRecordFirstName(id, name) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(2)).toHaveText(name);
+        await this.checkNewRecordField(id, 2, name);
     }
 
     async checkNewRecordLastName(id, lastname) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(1)).toHaveText(lastname);
+        await this.checkNewRecordField(id, 1, lastname);
     }
 
     async checkNewRecordDependant(id, dependantNum) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(3)).toHaveText(String(dependantNum));
+        await this.checkNewRecordField(id, 3, String(dependantNum));
     }
 
     async checkNewRecordSalary(id) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(4)).toHaveText(String((salaryPerPaycheck * paychecksPerYear).toFixed(2)));
+        const salary = (salaryPerPaycheck * paychecksPerYear).toFixed(2);
+        await this.checkNewRecordField(id, 4, salary);
     }
 
     async checkNewRecordGrossPay(id) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(5)).toHaveText(String(salaryPerPaycheck.toFixed(2)));
+        await this.checkNewRecordField(id, 5, salaryPerPaycheck.toFixed(2));
     }
 
     async checkNewRecordBenefitsCost(id, dependantNum) {
-        const benefitsCost = await this.calcBenefitsCost(dependantNum);
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(6)).toHaveText(String(benefitsCost));
+        const benefitsCost = this.calculateBenefitsCost(dependantNum);
+        await this.checkNewRecordField(id, 6, benefitsCost);
     }
 
     async checkNewRecordNetPay(id, dependantNum) {
-        const netPayPerPaycheck = await this.calcnetPayPerPaycheck(dependantNum);
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await expect(tableRow.locator('td').nth(7)).toHaveText(String(netPayPerPaycheck));
+        const netPay = this.calculateNetPayPerPaycheck(dependantNum);
+        await this.checkNewRecordField(id, 7, netPay);
     }
 
     async checkBenefitsCost(name, dependantNum) {
-        const benefitsCost = await this.calcBenefitsCost(dependantNum);
-        const tableRow = this.table.locator('tr', { hasText: name });
-        await expect(tableRow.locator('td').nth(6)).toHaveText(String(benefitsCost));
+        const benefitsCost = this.calculateBenefitsCost(dependantNum);
+        await this.checkNewRecordField(name, 6, benefitsCost);
     }
 
     async checkRecordNetPay(name, dependantNum) {
-        const netPayPerPaycheck = await this.calcnetPayPerPaycheck(dependantNum);
-        const tableRow = this.table.locator('tr', { hasText: name });
-        await expect(tableRow.locator('td').nth(7)).toHaveText(String(netPayPerPaycheck));
+        const netPay = this.calculateNetPayPerPaycheck(dependantNum);
+        await this.checkNewRecordField(name, 7, netPay);
     }
 
-    async calcBenefitsCost(dependantNum) {
+    calculateBenefitsCost(dependantNum) {
         return ((employeeBenefitsCost + (dependentBenefitsCost * dependantNum)) / paychecksPerYear).toFixed(2);
     }
 
-    async calcnetPayPerPaycheck(dependantNum) {
-        return ((salaryPerPaycheck) - ((employeeBenefitsCost + (dependentBenefitsCost * dependantNum)) / paychecksPerYear)).toFixed(2);
+    calculateNetPayPerPaycheck(dependantNum) {
+        return (salaryPerPaycheck - (employeeBenefitsCost + (dependentBenefitsCost * dependantNum)) / paychecksPerYear).toFixed(2);
     }
 
-    async clickUpdateRecordButton(id) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await tableRow.locator('.fa-edit').click();
+    async clickUpdateRecord(id) {
+        await this.table.locator('tr', { hasText: id }).locator('.fa-edit').click();
     }
 
     async clickDeleteRecordButton(id) {
-        const tableRow = this.table.locator('tr', { hasText: id });
-        await tableRow.locator('.fa-times').click();
+        await this.table.locator('tr', { hasText: id }).locator('.fa-times').click();
     }
 
     async checkDeletedRecord(id) {
         await this.page.waitForTimeout(500);
-        await this.table.locator('tr').forEach(async (row) => {
+        const rows = this.table.locator('tr');
+        for (let i = 0; i < await rows.count(); i++) {
+            const row = rows.nth(i);
             await expect(row.locator('td')).not.toContainText(id);
-        });
+        }
     }
 
     async checkDashboardPageElements() {
@@ -114,12 +109,14 @@ exports.DashboardPage = class DashboardPage {
     }
 
     async clickUpdateRandomRecord() {
-        const tableRows = await this.table.locator('tr').count();
-        const randomRow = faker.datatype.int({
-            min: 0,
-            max: tableRows - 1,
-        });
-        const row = this.table.locator('tr').nth(randomRow);
-        await row.locator('.fa-edit').click();
+        await this.tableRow.first().waitFor({ state: 'visible' });
+        const tableRowsCount = await this.tableRow.count();
+
+        if (tableRowsCount === 0) {
+            throw new Error('No rows available to select for update.');
+        }
+
+        const index = tableRowsCount === 1 ? 0 : Math.floor(Math.random() * tableRowsCount);
+        await this.tableRow.nth(index).locator('.fa-edit').click();
     }
 };

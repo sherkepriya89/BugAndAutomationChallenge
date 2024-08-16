@@ -1,6 +1,50 @@
 {
-    "credentials": {
-        "username": "TestUser419",
-        "password": "Nz$pl{}$61si"
+    "firstMax": {
+        "firstName": "This is the First Name with more than 50 characters",
+        "lastName": "Priya",
+        "dependants": 1,
+        "errorMessage": "The field FirstName must be a string with a maximum length of 50."
+    },
+    "lastMax": {
+        "firstName": "Sherke",
+        "lastName": "This is the Last Name with more than 50 characters",
+        "dependants": 1,
+        "errorMessage": "The field LastName must be a string with a maximum length of 50."
+    },
+    "dependantsMax": {
+        "firstName": "Priya",
+        "lastName": "Sherke",
+        "dependants": 33,
+        "errorMessage": "The field Dependants must be between 0 and 32."
+    },
+    "firstInvalid": {
+        "firstName": "~`!@#$%^&*()_+1234567890",
+        "lastName": "Sherke",
+        "dependants": 32,
+        "errorMessage": "The field FirstName must be a string with a maximum length of 50."
+    },
+    "lastInvalid": {
+        "firstName": "Priya",
+        "lastName": "!@#$%^&*()_+1234567890",
+        "dependants": 15,
+        "errorMessage": "The field LastName must be a string with a maximum length of 50."
+    },
+    "firstEmpty": {
+        "firstName": "",
+        "lastName": "Sherke",
+        "dependants": 30,
+        "errorMessage": "The FirstName field is required."
+    },
+    "lastEmpty": {
+        "firstName": "Priya",
+        "lastName": "",
+        "dependants": 12,
+        "errorMessage": "The LastName field is required."
+    },
+    "dependantsEmpty": {
+        "firstName": "Priya",
+        "lastName": "Sherke",
+        "dependants": "",
+        "errorMessage": "The Dependants field is required."
     }
 }
