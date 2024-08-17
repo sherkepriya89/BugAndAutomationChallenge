@@ -464,7 +464,7 @@ No error message is shown, and the application allows the update with these inco
 ![](Bug14.gif)
 
 ---
-## Bug 15: Cancel button color does not change on hovered over.
+## Bug 15: Cancel button color does not change on hovered over
 
 **Priority:** Low
 
