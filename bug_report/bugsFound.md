@@ -789,7 +789,7 @@ All records are displayed in the employee table without any pagination or record
 
 **Attachments:**
 
-![](Bug24.png)
+![](Bug25.gif)
 
 ---
 
