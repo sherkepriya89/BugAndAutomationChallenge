@@ -175,7 +175,7 @@ test.describe('API Negative Test Suite', () => {
         );
     });
 
-    test.only('Create employee with invalid dependents', async ({ request }) => {
+    test('Create employee with invalid dependents', async ({ request }) => {
         const { dependantsMax } = dataSet;
         const response = await request.post(baseUrl, {
             data: {

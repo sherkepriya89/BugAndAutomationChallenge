@@ -23,8 +23,8 @@ Below are the bugs found during testing:
 20. [CSV Injection allowed in First and Last Name fields](#bug-20-csv-injection-allowed-in-first-and-last-name-fields)
 21. [No error displayed when adding more than 50 characters in first and last name field](#bug-21-no-error-displayed-when-adding-more-than-50-characters-in-first-and-last-name-field)
 22. [No option to delete multiple records](#bug-22-no-option-to-delete-multiple-records)
-
-
+23. [Edit and Delete button not accessible through keyboard](#bug-23-edit-and-delete-button-not-accessible-through-keyboard)
+24. [The token is in Base 64 which can be easily decoded to get username and password](#bug-23-the-token-is-in-base-64-which-can-be-easily-decoded-to-get-username-and-password)
 
 ---
 ## Bug 1: First Name and Last Name are incorrectly displayed
@@ -491,15 +491,18 @@ The "Cancel" button does not change color or provide any visual indication when 
 ![](Bug15.gif)
 
 ---
-## Bug 16: Incorrect username and password submission leads to an HTTP ERROR 405 page instead of showing an error message
+## Bug 16: Incorrect username submission leads to an HTTP ERROR 405 page instead of showing an error message.
 
 **Priority:** High
 
 **Description:**
 
-When a user enters an incorrect username and/or password on the login page, instead of displaying an error message indicating invalid credentials, the application redirects to an error page with the following message:
+When an incorrect username is submitted, the system responds with an HTTP ERROR 405 page instead of displaying a proper error message indicating that the username is invalid. This is different error than what it gives when password is incorrect. This behavior allows for potential security vulnerabilities:
 
-“This page isn’t working. If the problem continues, contact the site owner. HTTP ERROR 405.”
+Username Guessing: Because the system does not provide specific feedback for invalid usernames, an attacker can attempt to guess valid usernames by submitting various inputs. This process could lead to identifying valid usernames more easily.
+
+Brute Force Attacks: The lack of error messages for incorrect usernames enables attackers to use brute force methods to try multiple username and password combinations without immediate feedback, increasing the risk of unauthorized access.
+
 
 **Steps to Reproduce:**
 
@@ -518,6 +521,11 @@ The application redirects to an HTTP ERROR 405 page with the message: “This pa
 **Attachments:**
 
 ![](Bug16.gif)
+
+When incorrect password is added it gives below error. 
+
+![](Bug16.png)
+
 
 ---
 ## Bug 17: Missing option to sort users in employee table on Benefits Dashboard Page.
@@ -702,3 +710,58 @@ There is no option to delete multiple records at once. Users can only delete rec
 ![](Bug22.gif)
 
 ---
+## Bug 23: Edit and Delete button not accessible through keyboard
+
+**Priority:** Medium
+
+**Description:**
+
+The Edit and Delete buttons on the employee management interface are not accessible using keyboard navigation. 
+
+**Steps to Reproduce:**
+
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login
+2. Log in with valid credentials.
+3. Use the Tab key to move focus through the interactive elements on the page.
+
+**Expected Result:**
+
+The Edit and Delete buttons should be accessible via keyboard navigation, and users should be able to interact with them using keyboard shortcuts.
+
+**Actual Result:**
+
+The Edit and Delete buttons are not reachable or focusable through keyboard navigation. Users cannot select or activate these buttons using the keyboard.
+
+**Attachments:**
+
+![](Bug23.gif)
+
+---
+## Bug 24: The token is in Base 64 which can be easily decoded to get username and password
+
+**Priority:** High
+
+**Description:**
+
+The authentication token used in the system is encoded in Base64. This encoding format is not secure, as it can be easily decoded to reveal sensitive information such as the username and password. This exposes the application to security risks, as an attacker with access to the token can obtain plaintext credentials. 
+
+**Steps to Reproduce:**
+
+1. Decode the token using a Base64 decoding tool or library.
+2. Observe that the decoded token reveals the username and password in plaintext.
+
+**Expected Result:**
+
+Authentication tokens should be securely encoded or encrypted to prevent easy decoding and exposure of sensitive information.
+
+**Actual Result:**
+
+The token is encoded in Base64, allowing straightforward decoding to access the username and password.
+
+**Attachments:**
+
+![](Bug24.png)
+
+---
+
+
