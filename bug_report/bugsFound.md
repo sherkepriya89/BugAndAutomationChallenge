@@ -594,9 +594,7 @@ In the given example, , the onerror attribute is used to trigger a JavaScript al
 4. Enter `<img src=asd onerror=alert(location)>` in the First Name and Last Name fields.
 5. Enter a number less than 32 or more than 0 in the Dependents field.
 6. Click the "Add" button.
-7. Click Log out.
-8. Login again with valid credentials.
-9. An alert will popup twice (one for first name and one for last name).
+7. The malicious XSS payload getting executed twice (once for first name and second time for last name)
 
 **Expected Result:**
 
