@@ -27,8 +27,8 @@ API tests focus on validating the behavior of the application’s endpoints. Com
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/sherkepriya89/BugAndAutomationChallenge.git
+   cd BugAndAutomationChallenge
    ```
 
 2. Install dependencies:
