@@ -624,8 +624,9 @@ The application does not properly sanitize inputs for the First Name and Last Na
 3. Click on the "Add Employee" button.
 4. Enter `=HYPERLINK("https://google.com","click")` in the First Name and Last Name fields.
 6. Click the "Add" button.
-7. OCreate a CSV file from the employees table or copy the records into a CSV file.
-8. Open the CSV file and observe that the record shows "click" as a clickable link.
+7. This application does not have export csv functionality but if any other application is using data from Benefits application it will be vulnerable to csv injection.
+8. Copy and paste the data in excel sheet.
+9. Observe that the record shows "click" as a clickable link.
 
 **Expected Result:**
 
