@@ -15,7 +15,7 @@ Below are the bugs found during testing:
 12. [Edit Employee window displays "Add Employee"](#bug-12-edit-employee-window-displays-add-employee)
 13. [Table border misaligns with table content after window resizing](#bug-13-table-border-misaligns-with-table-content-after-window-resizing)
 14. [Updating deleted record is possible and saves incorrect data (0 Salary and Gross Pay) when update and delete are performed in different tabs/browsers](#bug-14-updating-deleted-record-is-possible-and-saves-incorrect-data-0-salary-and-gross-pay-when-update-and-delete-are-performed-in-different-tabsbrowsers)
-15. [Cancel button color does not change when hovered over](#bug-15-cancel-button-color-does-not-change-when-hovered-over)
+15. [Cancel button color does not change on hovered over](#bug-15-cancel-button-color-does-not-change-when-hovered-over)
 16. [Incorrect username submission leads to an HTTP ERROR 405 page instead of showing an error message](#bug-16-incorrect-username-submission-leads-to-an-http-error-405-page-instead-of-showing-an-error-message)
 17. [Missing option to sort users in employee table on Benefits Dashboard Page](#bug-17-missing-option-to-sort-users-in-employee-table-on-benefits-dashboard-page)
 18. [No limit on login attempts](#bug-18-no-limit-on-login-attempts)
@@ -24,7 +24,8 @@ Below are the bugs found during testing:
 21. [No error displayed when adding more than 50 characters in first and last name field](#bug-21-no-error-displayed-when-adding-more-than-50-characters-in-first-and-last-name-field)
 22. [No option to delete multiple records](#bug-22-no-option-to-delete-multiple-records)
 23. [Edit and Delete button not accessible through keyboard](#bug-23-edit-and-delete-button-not-accessible-through-keyboard)
-24. [The token is in Base 64 which can be easily decoded to get username and password](#bug-23-the-token-is-in-base-64-which-can-be-easily-decoded-to-get-username-and-password)
+24. [The token is in Base 64 which can be easily decoded to get username and password](#bug-24-the-token-is-in-base-64-which-can-be-easily-decoded-to-get-username-and-password)
+25. [There is no limit or pagination available for the records in employee table.](#bug-25-there-is-no-limit-or-pagination-available-for-the-records-in-employee-table)
 
 ---
 ## Bug 1: First Name and Last Name are incorrectly displayed
@@ -461,7 +462,7 @@ No error message is shown, and the application allows the update with these inco
 ![](Bug14.gif)
 
 ---
-## Bug 15: Cancel button color does not change on hover (Unlike Add , Edit and Delete buttons)
+## Bug 15: Cancel button color does not change on hovered over.
 
 **Priority:** Low
 
@@ -763,5 +764,36 @@ The token is encoded in Base64, allowing straightforward decoding to access the 
 ![](Bug24.png)
 
 ---
+
+## Bug 25: There is no limit or pagination available for the records in employee table.
+
+**Priority:** Medium
+
+**Description:**
+
+Currently, the employee table displays all records without any form of pagination or record limit. This absence of pagination can cause slow loading times and affect user experience, especially when dealing with a large number of employees.
+
+**Steps to Reproduce:**
+
+1. Navigate to the Benefits Dashboard page.
+2. Observe the employee table.
+3. Note that all records are displayed in a single view without pagination or a record limit.
+
+**Expected Result:**
+
+The employee table should include pagination controls or a record limit feature to manage the display of large data sets more efficiently. Users should be able to navigate through pages of records rather than having all records displayed at once.
+
+**Actual Result:**
+
+All records are displayed in the employee table without any pagination or record limit.
+
+**Attachments:**
+
+![](Bug24.png)
+
+---
+
+
+
 
 
