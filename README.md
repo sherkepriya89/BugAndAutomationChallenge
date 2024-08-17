@@ -29,3 +29,28 @@ API tests focus on validating the behavior of the application’s endpoints. Com
    ```bash
    git clone https://github.com/your-repo-name.git
    cd your-repo-name
+
+2. Install Dependencies:
+   ```bash
+   npm install
+
+3. Install Playwright browsers:
+   ```bash
+   npx playwright install
+
+## Running Tests
+
+1. Run All Tests:
+   ```bash
+  npx playwright test
+
+
+2. Run UI Tests:
+   ```bash
+   npx playwright test tests/uiTests
+
+
+3. Run API Tests:
+   ```bash
+   npx playwright test tests/apiTests
+
