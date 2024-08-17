@@ -1,5 +1,5 @@
 const { test, expect } = require('../../utils/fixtures.js');
-const dataSet = JSON.parse(JSON.stringify(require('../../utils/data.json')));
+const dataSet = require('../../utils/data.json');
 
 
 test.describe('Login Test Suite', () => {

@@ -121,7 +121,7 @@ The "Add" button does not trigger any action. The form remains unchanged, and no
 
 **Description:**
 
-The benefits page can be accessed directly if the URL is known, bypassing the authentication process. This issue allows unauthorized users to access benefits page without logging in.
+The benefits page can be accessed directly if the URL is known, bypassing the authentication process.
 
 **Steps to Reproduce:**
 
@@ -135,7 +135,6 @@ The benefits page can be accessed directly if the URL is known, bypassing the au
 **Expected Result:**
 
 The benefits page should require authentication (username and password) before granting access.
-Unauthorized users should not be able to access the benefits page even if they know the URL.
 
 **Actual Result:**
 
@@ -183,7 +182,7 @@ The error is only visible in the API call response, which does not inform the us
 
 **Description:**
 
-When special charactersare allowed in the First Name and Last Name fields.
+Special characters are allowed in the First Name and Last Name fields.
 
 **Steps to Reproduce:**
 
@@ -215,7 +214,7 @@ The form accepts special characters in the First Name and Last Name fields.
 
 **Description:**
 
-When a user is logged out due to inactivity, no error message or notification is displayed to inform the user of their logged-out status. The issue is only evident by inspecting the API call, which returns an "unauthorized" error indicating that the session has expired.
+When a user is logged out due to inactivity, no error message or notification is displayed to inform the user of their logged-out status instead the user can see the benefits page as if the user is still logged in. The issue is only evident by inspecting the API call, which returns an "unauthorized" error indicating that the session has expired.
 
 **Steps to Reproduce:**
 
@@ -344,24 +343,24 @@ The record is not added, and the user is required to manually click the "Add" bu
 
 **Description:**
 
-Pressing the Enter key on the keyboard does not work for the "Add" button, preventing the user from adding the record using the keyboard. This issue impacts user experience by not providing a standard way to submit the form via keyboard input.
+Clicking the "Add" button quickly multiple times results in duplicate employee records being added. 
 
 **Steps to Reproduce:**
 
-1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+1. Navigate to https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login.
 2. Log in with valid credentials.
 3. Click on the "Add Employee" button.
 4. Enter First Name, Last Name, and Dependents.
-5. Press Enter/Return on keyboard.
-6. Observe that the mouse cursor disappears and "Add" button is not triggered, and the record is not added.
+5. Rapidly click the "Add" button multiple times in quick succession.
+6. Observe that multiple identical employee records are added.
 
 **Expected Result:**
 
-The record should be added successfully when the Enter key is pressed.
+Only a single employee record should be added, regardless of how many times the "Add" button is clicked quickly.
 
 **Actual Result:**
 
-The record is not added, and the user is required to manually click the "Add" button.
+Multiple duplicate employee records are added when the "Add" button is clicked rapidly in quick succession. Each click triggers a separate submission, leading to identical entries being created in the employee table.
 
 **Attachments:**
 

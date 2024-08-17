@@ -107,4 +107,9 @@ This project also supports [Allure](https://docs.qameta.io/allure/) for more det
 
 - [UI Bugs](bug_report/bugsFound.md)
 - [API Bugs](bug_report/apiBugs.md)
-```
+
+## Sample Test Results
+
+All the failed tests are the bugs added in bug report.
+
+![](TestReport.png)

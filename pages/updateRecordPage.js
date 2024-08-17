@@ -7,10 +7,10 @@ exports.UpdateRecordPage = class UpdateRecordPage {
         this.modalTitle = this.modal.locator('.modal-title');
         this.firstName = page.locator("#firstName");
         this.lastName = page.locator("#lastName");
-        this.dependents = page.locator("#dependents");
+        this.dependents = page.locator("#dependants");
         this.updateButton = this.modal.locator("#updateEmployee");
         this.cancelButton = this.modal.locator('button:has-text("Cancel")');
-        this.closeButton = page.locator(".close");
+        this.closeButton = this.modal.locator(".close");
     }
 
     async verifyModalIsVisible() {
@@ -59,14 +59,14 @@ exports.UpdateRecordPage = class UpdateRecordPage {
     }
     async verifyCloseButton() {
         await this.verifyModalIsVisible();
-        await this.clickCancel();
+        await this.clickClose();
         await this.verifyModalIsHidden();
 
     }
 
     async verifyCancelButton() {
         await this.verifyModalIsVisible();
-        await this.clickClose();
+        await this.clickCancel();
         await this.verifyModalIsHidden();
 
     }
