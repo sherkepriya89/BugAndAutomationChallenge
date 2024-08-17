@@ -373,22 +373,22 @@ Multiple duplicate employee records are added when the "Add" button is clicked r
 
 **Description:**
 
-In the "Update Employee" window, the title incorrectly displays "Add Employee" instead of "Update Employee." This mislabeling can lead to confusion about the function of the window, as users may mistakenly think they are adding a new employee rather than updating an existing one.
+In the "Edit Employee" window, the title incorrectly displays "Add Employee" instead of "Edit Employee." This mislabeling can lead to confusion about the function of the window, as users may mistakenly think they are adding a new employee rather than updating an existing one.
 
 **Steps to Reproduce:**
 
 1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
 2. Log in with valid credentials.
-3. Click on the "Update Employee" button.
+3. Click on the "Edit Employee" button.
 4. Observe the window title.
 
 **Expected Result:**
 
-The "Update Employee" window should display the correct title.
+The "Edit Employee" window should display the correct title.
 
 **Actual Result:**
 
-The "Update Employee" window incorrectly displays "Add Employee."
+The "Edit Employee" window incorrectly displays "Add Employee."
 
 **Attachments:**
 
