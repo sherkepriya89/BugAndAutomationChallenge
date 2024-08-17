@@ -1,6 +1,3 @@
-Here is the corrected and properly formatted Markdown file with consistent indentation, formatting, and clear structure:
-
-```markdown
 # BugAndAutomationChallenge
 
 This project uses [Playwright](https://playwright.dev/) for automated testing of both UI and API functionalities. The tests are written in JavaScript and leverage the [Faker](https://www.npmjs.com/package/faker) library to generate test data, including negative test data stored in the `utils/data.json` file.
