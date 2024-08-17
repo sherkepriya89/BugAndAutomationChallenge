@@ -204,7 +204,7 @@ The expiration field is incorrectly modifiable through a PUT request, even thoug
 ![](APIBug6.gif)
 
 ---
-## Bug 7: Dependents is mispelled in JSON response.
+## Bug 7: Dependents is misspelled in JSON response.
 
 **Priority:** Medium
 
