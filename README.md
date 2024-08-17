@@ -49,8 +49,6 @@ API tests focus on validating the behavior of the application’s endpoints. Com
    ```bash
    npx playwright test tests/uiTests
 
-
 3. Run API Tests:
    ```bash
    npx playwright test tests/apiTests
-
