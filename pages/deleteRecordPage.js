@@ -1,13 +1,13 @@
 const { expect } = require('@playwright/test');
 
-exports.UpdateRecordPage = class UpdateRecordPage {
+exports.DeleteRecordPage = class DeleteRecordPage {
     constructor(page) {
         this.page = page;
         this.modal = page.locator('div.modal-content:has-text("Delete Employee")');
-        this.modalTitle = this.modal.locator('.modal-title');
+        this.modalTitle = this.modal.locator(".modal-title");
         this.deleteButton = this.modal.locator("#deleteEmployee");
         this.cancelButton = this.modal.locator('button:has-text("Cancel")');
-        this.closeButton = page.locator(".close");
+        this.closeButton = this.modal.locator(".close");
         this.confirmationText = page.locator(".modal-body");
     }
 
@@ -24,7 +24,7 @@ exports.UpdateRecordPage = class UpdateRecordPage {
         await expect(this.modal).toBeHidden();
     }
 
-    async deleteEmployee() {
+    async deleteRecord() {
         await this.deleteButton.click({ force: true });
     }
 
@@ -38,14 +38,14 @@ exports.UpdateRecordPage = class UpdateRecordPage {
 
     async verifyCloseButton() {
         await this.verifyModalIsVisible();
-        await this.clickCancel();
+        await this.clickClose();
         await this.verifyModalIsHidden();
 
     }
 
     async verifyCancelButton() {
         await this.verifyModalIsVisible();
-        await this.clickClose();
+        await this.clickCancel();
         await this.verifyModalIsHidden();
 
     }

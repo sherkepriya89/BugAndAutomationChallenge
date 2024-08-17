@@ -13,6 +13,12 @@ exports.LoginPage = class LoginPage {
         await this.page.goto(url);
     }
 
+    async checkLoginPageLink() {
+        const expectedPath = '/Account/LogIn';
+        const currentUrl = this.page.url();
+        await expect(currentUrl).toContain(expectedPath);
+    }
+
     async enterUsername(username) {
         await this.username.fill(username);
     }

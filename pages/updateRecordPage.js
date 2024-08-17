@@ -7,7 +7,7 @@ exports.UpdateRecordPage = class UpdateRecordPage {
         this.modalTitle = this.modal.locator('.modal-title');
         this.firstName = page.locator("#firstName");
         this.lastName = page.locator("#lastName");
-        this.dependants = page.locator("#dependants");
+        this.dependents = page.locator("#dependents");
         this.updateButton = this.modal.locator("#updateEmployee");
         this.cancelButton = this.modal.locator('button:has-text("Cancel")');
         this.closeButton = page.locator(".close");
@@ -34,8 +34,8 @@ exports.UpdateRecordPage = class UpdateRecordPage {
         await this.lastName.fill(lastName);
     }
 
-    async enterDependants(dependants) {
-        await this.dependants.fill(dependants.toString());
+    async enterDependents(dependents) {
+        await this.dependents.fill(dependents.toString());
     }
 
     async updateEmployee() {
@@ -50,10 +50,10 @@ exports.UpdateRecordPage = class UpdateRecordPage {
         await this.closeButton.click();
     }
 
-    async updateRecord(firstname, lastname, dependants) {
+    async updateRecord(firstname, lastname, dependents) {
         await this.enterFirstname(firstname);
         await this.enterLastname(lastname);
-        await this.enterDependants(dependants);
+        await this.enterDependents(dependents);
         await this.updateEmployee();
 
     }

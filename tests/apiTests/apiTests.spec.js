@@ -5,7 +5,7 @@ let employeeId;
 const requestBody = {
     firstName: "Priya",
     lastName: "Sherke",
-    dependants: 10
+    dependents: 10
 };
 const baseUrl = `${process.env.API_URL}/employees`;
 const headers = {

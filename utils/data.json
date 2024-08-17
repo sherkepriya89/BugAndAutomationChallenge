@@ -46,5 +46,26 @@
         "lastName": "Sherke",
         "dependants": "",
         "errorMessage": "The Dependants field is required."
+    },
+    "emptyLogin": {
+        "username": " ",
+        "password": "",
+        "errorMessage": "There were one or more problems that prevented you from logging in: The Username field is required. The Password field is required."
+    },
+    "incorrectUsername": {
+        "username": "abdcdef",
+        "errorMessage": "There were one or more problems that prevented you from logging in: The specified username or password is incorrect."
+    },
+    "incorrectPassword": {
+        "password": "abdcdef",
+        "errorMessage": "There were one or more problems that prevented you from logging in: The specified username or password is incorrect."
+    },
+    "emptyUsername": {
+        "username": " ",
+        "errorMessage": "There were one or more problems that prevented you from logging in: The Username field is required."
+    },
+    "emptyPassword": {
+        "password": " ",
+        "errorMessage": "There were one or more problems that prevented you from logging in: The Password field is required."
     }
 }

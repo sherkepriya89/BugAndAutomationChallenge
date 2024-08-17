@@ -3,7 +3,8 @@
     "@faker-js/faker": "^8.4.1",
     "allure-playwright": "^3.0.0-beta.10",
     "dotenv": "^16.4.5",
-    "playwright": "^1.46.0"
+    "playwright": "^1.46.0",
+    "uuid-timestamp": "^1.1.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.46.0",

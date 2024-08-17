@@ -4,7 +4,7 @@ const { faker } = require('@faker-js/faker');
 
 const firstName = faker.person.firstName();
 const lastName = faker.person.lastName();
-const dependantNum = faker.number.int({ min: 0, max: 32 });
+const dependentNum = faker.number.int({ min: 0, max: 32 });
 let id;
 
 
@@ -14,7 +14,7 @@ test.describe('Add Employee Test Suite', () => {
         await loginPage.goToLoginPage(process.env.URL);
         await loginPage.performLogin(process.env.USERNAME, process.env.PASSWORD);
         await dashboardPage.clickOnAddEmployeeButton();
-        await addEmployeePage.addNewRecord(firstName, lastName, dependantNum);
+        await addEmployeePage.addNewRecord(firstName, lastName, dependentNum);
         id = await dashboardPage.getNewRecordID(firstName);
     });
 
@@ -26,8 +26,8 @@ test.describe('Add Employee Test Suite', () => {
         await dashboardPage.checkNewRecordLastName(id, lastName);
     });
 
-    test('Verify the number of dependants for the newly added employee', async ({ dashboardPage }) => {
-        await dashboardPage.checkNewRecordDependant(id, dependantNum);
+    test('Verify the number of dependents for the newly added employee', async ({ dashboardPage }) => {
+        await dashboardPage.checkNewRecordDependent(id, dependentNum);
     });
 
     test('Verify the salary of the newly added employee', async ({ dashboardPage }) => {
@@ -39,11 +39,11 @@ test.describe('Add Employee Test Suite', () => {
     });
 
     test('Verify the benefits cost for the newly added employee', async ({ dashboardPage }) => {
-        await dashboardPage.checkNewRecordBenefitsCost(id, dependantNum);
+        await dashboardPage.checkNewRecordBenefitsCost(id, dependentNum);
     });
 
     test('Verify the net pay of the newly added employee', async ({ dashboardPage }) => {
-        await dashboardPage.checkNewRecordNetPay(id, dependantNum);
+        await dashboardPage.checkNewRecordNetPay(id, dependentNum);
     });
 
 });
@@ -83,7 +83,7 @@ test.describe('Negative Add Employee Modal Test Suite', () => {
         await addEmployeePage.addNewRecord(
             dataSet.firstMax.firstName,
             dataSet.firstMax.lastName,
-            dataSet.firstMax.dependants
+            dataSet.firstMax.dependents
         );
 
         // Checking if the error message is visible
@@ -95,23 +95,23 @@ test.describe('Negative Add Employee Modal Test Suite', () => {
         await addEmployeePage.addNewRecord(
             dataSet.lastMax.firstName,
             dataSet.lastMax.lastName,
-            dataSet.lastMax.dependants
+            dataSet.lastMax.dependents
         );
 
         // Checking if the error message is visible
         expect(await page.locator(`text=${dataSet.lastMax.errorMessage}`).isVisible()).toBe(true);
     });
 
-    test('Verify more than 32 or less than 0 dependants shows error', async ({ addEmployeePage, page }) => {
+    test('Verify more than 32 or less than 0 dependents shows error', async ({ addEmployeePage, page }) => {
         // Added a new record from the data.json file
         await addEmployeePage.addNewRecord(
-            dataSet.dependantsMax.firstName,
-            dataSet.dependantsMax.lastName,
-            dataSet.dependantsMax.dependants
+            dataSet.dependentsMax.firstName,
+            dataSet.dependentsMax.lastName,
+            dataSet.dependentsMax.dependents
         );
 
         // Checking if the error message is visible
-        expect(await page.locator(`text=${dataSet.dependantsMax.errorMessage}`).isVisible()).toBe(true);
+        expect(await page.locator(`text=${dataSet.dependentsMax.errorMessage}`).isVisible()).toBe(true);
     });
 
     test('Verify empty first name shows error', async ({ addEmployeePage, page }) => {
@@ -119,7 +119,7 @@ test.describe('Negative Add Employee Modal Test Suite', () => {
         await addEmployeePage.addNewRecord(
             dataSet.firstEmpty.firstName,
             dataSet.firstEmpty.lastName,
-            dataSet.firstEmpty.dependants
+            dataSet.firstEmpty.dependents
         );
 
         // Checking if the error message is visible
@@ -131,23 +131,23 @@ test.describe('Negative Add Employee Modal Test Suite', () => {
         await addEmployeePage.addNewRecord(
             dataSet.lastEmpty.firstName,
             dataSet.lastEmpty.lastName,
-            dataSet.lastEmpty.dependants
+            dataSet.lastEmpty.dependents
         );
 
         // Checking if the error message is visible
         expect(await page.locator(`text=${dataSet.lastEmpty.errorMessage}`).isVisible()).toBe(true);
     });
 
-    test('Verify empty dependants shows error', async ({ addEmployeePage, page }) => {
+    test('Verify empty dependents shows error', async ({ addEmployeePage, page }) => {
         // Added a new record from the data.json file
         await addEmployeePage.addNewRecord(
-            dataSet.dependantsEmpty.firstName,
-            dataSet.dependantsEmpty.lastName,
-            dataSet.dependantsEmpty.dependants
+            dataSet.dependentsEmpty.firstName,
+            dataSet.dependentsEmpty.lastName,
+            dataSet.dependentsEmpty.dependents
         );
 
         // Checking if the error message is visible
-        expect(await page.locator(`text=${dataSet.dependantsEmpty.errorMessage}`).isVisible()).toBe(true);
+        expect(await page.locator(`text=${dataSet.dependentsEmpty.errorMessage}`).isVisible()).toBe(true);
     });
 
 });

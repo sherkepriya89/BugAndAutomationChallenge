@@ -2,11 +2,11 @@ const { test } = require('../../utils/fixtures.js');
 const { faker } = require('@faker-js/faker');
 const firstName = faker.person.firstName();
 const lastName = faker.person.lastName();
-const dependantNum = faker.number.int({ min: 0, max: 32 });
+const dependentNum = faker.number.int({ min: 0, max: 32 });
 let id;
 const newFirstName = faker.person.firstName();
 const newLastName = faker.person.lastName();
-const newDependantNum = faker.number.int({
+const newDependentNum = faker.number.int({
     'min': 0,
     'max': 32
 });
@@ -16,10 +16,10 @@ test.describe('Update Employee Test Suite', () => {
         await loginPage.goToLoginPage(process.env.URL);
         await loginPage.performLogin(process.env.USERNAME, process.env.PASSWORD);
         await dashboardPage.clickOnAddEmployeeButton();
-        await addEmployeePage.addNewRecord(firstName, lastName, dependantNum);
+        await addEmployeePage.addNewRecord(firstName, lastName, dependentNum);
         id = await dashboardPage.getNewRecordID(firstName);
         await dashboardPage.clickUpdateRecord(id);
-        await updateRecordPage.updateRecord(newFirstName, newLastName, newDependantNum);
+        await updateRecordPage.updateRecord(newFirstName, newLastName, newDependentNum);
     });
 
     test('Verify the first name of the updated employee', async ({ dashboardPage }) => {
@@ -30,8 +30,8 @@ test.describe('Update Employee Test Suite', () => {
         await dashboardPage.checkNewRecordLastName(id, newLastName);
     });
 
-    test('Verify the number of dependants for updated employee', async ({ dashboardPage }) => {
-        await dashboardPage.checkNewRecordDependant(id, newDependantNum);
+    test('Verify the number of dependents for updated employee', async ({ dashboardPage }) => {
+        await dashboardPage.checkNewRecordDependent(id, newDependentNum);
     });
 
     test('Verify the salary of the updated employee', async ({ dashboardPage }) => {
@@ -43,11 +43,11 @@ test.describe('Update Employee Test Suite', () => {
     });
 
     test('Verify the benefits cost updated employee', async ({ dashboardPage }) => {
-        await dashboardPage.checkNewRecordBenefitsCost(id, dependantNum);
+        await dashboardPage.checkNewRecordBenefitsCost(id, dependentNum);
     });
 
     test('Verify the net pay updated employee', async ({ dashboardPage }) => {
-        await dashboardPage.checkNewRecordNetPay(id, dependantNum);
+        await dashboardPage.checkNewRecordNetPay(id, dependentNum);
     });
 });
 
