@@ -1,26 +1,32 @@
 const { test, expect } = require('@playwright/test');
 require('dotenv').config();
 const dataSet = require('../../utils/data.json');
+const crypto = require('crypto'); // Ensure crypto module is required if used
 
 let employeeId;
-const requestBody = {
-    firstName: "Priya",
-    lastName: "Sherke",
-    dependents: 10
-};
 const baseUrl = `${process.env.API_URL}/employees`;
 const headers = {
     'Authorization': `Basic ${process.env.TOKEN}`,
     'Content-Type': 'application/json'
 };
 
+const requestBody = {
+    firstName: "Priya",
+    lastName: "Sherke",
+    dependents: 10
+};
+
+// Utility function to create a new employee and save the ID
+async function createEmployee(request) {
+    const response = await request.post(baseUrl, { data: requestBody, headers });
+    const responseBody = await response.json();
+    return responseBody.id;
+}
 
 // Before each test, ensure we have an employee ID
 test.beforeEach(async ({ request }) => {
     if (!employeeId) {
-        const response = await request.post(baseUrl, { data: requestBody, headers });
-        const responseBody = await response.json();
-        employeeId = responseBody.id;
+        employeeId = await createEmployee(request);
     }
 });
 
@@ -38,11 +44,10 @@ test.describe('API Status Code Test Suite', () => {
 
     test('Update employee details', async ({ request }) => {
         const updatedData = {
-            id: employeeId,
             firstName: "New",
             lastName: "User Edit"
         };
-        const response = await request.post(baseUrl, { data: updatedData, headers });
+        const response = await request.post(baseUrl, { data: { id: employeeId, ...updatedData }, headers });
         expect(response.status()).toBe(200);
     });
 
@@ -75,11 +80,10 @@ test.describe('API Response Validation Test Suite', () => {
 
     test('Update employee details', async ({ request }) => {
         const updatedData = {
-            id: employeeId,
             firstName: "User",
             lastName: "Edit"
         };
-        const response = await request.post(baseUrl, { data: updatedData, headers });
+        const response = await request.post(baseUrl, { data: { id: employeeId, ...updatedData }, headers });
         const responseBody = await response.json();
         expect(responseBody).toHaveProperty('firstName', updatedData.firstName);
         expect(responseBody).toHaveProperty('lastName', updatedData.lastName);
@@ -128,7 +132,8 @@ test.describe('API Negative Test Suite', () => {
         const responseBody = await response.text();
         expect(responseBody).toBe('');
     });
-    test.only('Create employee with invalid first name', async ({ request }) => {
+
+    test('Create employee with invalid first name', async ({ request }) => {
         const { firstMax } = dataSet;
         const response = await request.post(baseUrl, {
             data: {
@@ -144,6 +149,48 @@ test.describe('API Negative Test Suite', () => {
             expect.arrayContaining([
                 expect.objectContaining({
                     errorMessage: firstMax.errorMessage
+                })
+            ])
+        );
+    });
+
+    test('Create employee with invalid last name', async ({ request }) => {
+        const { lastMax } = dataSet;
+        const response = await request.post(baseUrl, {
+            data: {
+                firstName: lastMax.firstName,
+                lastName: lastMax.lastName,
+                dependants: lastMax.dependants
+            },
+            headers
+        });
+        const responseBody = await response.json();
+        expect(response.status()).toBe(lastMax.status);
+        expect(responseBody).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    errorMessage: lastMax.errorMessage
+                })
+            ])
+        );
+    });
+
+    test.only('Create employee with invalid dependents', async ({ request }) => {
+        const { dependantsMax } = dataSet;
+        const response = await request.post(baseUrl, {
+            data: {
+                firstName: dependantsMax.firstName,
+                lastName: dependantsMax.lastName,
+                dependants: dependantsMax.dependants
+            },
+            headers
+        });
+        const responseBody = await response.json();
+        expect(response.status()).toBe(dependantsMax.status);
+        expect(responseBody).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    errorMessage: dependantsMax.errorMessage
                 })
             ])
         );
