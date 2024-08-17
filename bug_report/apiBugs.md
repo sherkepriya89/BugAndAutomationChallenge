@@ -119,7 +119,7 @@ The salary value, which is supposed to be 52000 based on predefined rules, can b
 **Priority:** High
 
 **Description:**
-The salary value, which is supposed to be 52000 based on predefined rules, can be manually changed through a PUT request. 
+When sending a GET request to retrieve an employee using an invalid ID, the API returns a 500 Internal Server Error status code. This is incorrect behavior as the API should return a 400 Bad Request status code indicating that the ID is invalid or does not exist.
 
 **Steps to reproduce:**
 
@@ -141,7 +141,7 @@ The salary value, which is supposed to be 52000 based on predefined rules, can b
 **Priority:** High
 
 **Description:**
-The salary value, which is supposed to be 52000 based on predefined rules, can be manually changed through a PUT request. 
+When sending a POST request to create a new employee, including an expiration field in the request body, the API accepts the field and creates a new record with it. The expiration field should either be ignored or cause the request to be rejected.
 
 **Steps to reproduce:**
 
