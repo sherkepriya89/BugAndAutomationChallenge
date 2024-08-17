@@ -57,7 +57,7 @@ API tests focus on validating the behavior of the application’s endpoints. Com
 Playwright provides built-in HTML reports. After running tests, you can view the report by opening the generated `playwright-report/index.html` file.
 
 ### Generate and view the Playwright report:
-```bash
+``bash
 npx playwright show-report
 
 ## Allure Reporting
@@ -65,7 +65,7 @@ npx playwright show-report
 This project also supports [Allure](https://docs.qameta.io/allure/) for more detailed test reporting.
 
 ### Install the required dependencies:
-```bash
+``bash
 npm install --save-dev @playwright/test allure-playwright
 
 ### Set up Allure with Playwright by adding the following to your `playwright.config.js`:
@@ -82,17 +82,17 @@ module.exports = defineConfig({
 
 ### Run your tests:
 
-```bash
+``bash
 npx playwright test
 
 ### Generate the Allure report:
 
-```bash
+``bash
 npx allure generate ./allure-results --clean
 
 ### Open the Allure report:
 
-```bash
+``bash
 npx allure open
 
 ## Bugs Report
