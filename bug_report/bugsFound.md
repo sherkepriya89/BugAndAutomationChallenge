@@ -15,7 +15,7 @@ Below are the bugs found during testing:
 12. [Edit Employee window displays "Add Employee"](#bug-12-edit-employee-window-displays-add-employee)
 13. [Table border misaligns with table content after window resizing](#bug-13-table-border-misaligns-with-table-content-after-window-resizing)
 14. [Updating deleted record is possible and saves incorrect data (0 Salary and Gross Pay) when update and delete are performed in different tabs/browsers](#bug-14-updating-deleted-record-is-possible-and-saves-incorrect-data-0-salary-and-gross-pay-when-update-and-delete-are-performed-in-different-tabsbrowsers)
-15. [Cancel button color does not change on hovered over](#bug-15-cancel-button-color-does-not-change-when-hovered-over)
+15. [Cancel button color does not change when hovered over](#bug-15-cancel-button-color-does-not-change-when-hovered-over)
 16. [Incorrect username submission leads to an HTTP ERROR 405 page instead of showing an error message](#bug-16-incorrect-username-submission-leads-to-an-http-error-405-page-instead-of-showing-an-error-message)
 17. [Missing option to sort users in employee table on Benefits Dashboard Page](#bug-17-missing-option-to-sort-users-in-employee-table-on-benefits-dashboard-page)
 18. [No limit on login attempts](#bug-18-no-limit-on-login-attempts)
@@ -464,7 +464,7 @@ No error message is shown, and the application allows the update with these inco
 ![](Bug14.gif)
 
 ---
-## Bug 15: Cancel button color does not change on hovered over
+## Bug 15: Cancel button color does not change when hovered over
 
 **Priority:** Low
 
