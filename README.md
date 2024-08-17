@@ -108,6 +108,6 @@ This project also supports [Allure](https://docs.qameta.io/allure/) for more det
 
 ## Bugs Report
 
-- [UI Bugs](bugs_report/bugsFound.md)
-- [API Bugs](bugs_report/apiBugs.md)
+- [UI Bugs](bug_report/bugsFound.md)
+- [API Bugs](bug_report/apiBugs.md)
 ```
