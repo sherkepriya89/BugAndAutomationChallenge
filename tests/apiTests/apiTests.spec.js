@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 require('dotenv').config();
+const dataSet = require('../../utils/data.json');
 
 let employeeId;
 const requestBody = {
@@ -109,7 +110,7 @@ test.describe('API Negative Test Suite', () => {
         expect(errorResponse).toHaveProperty('errorMessage');
     });
 
-    test('Update employee with invalid ID', async ({ request }) => {
+    test('Edit employee with invalid ID', async ({ request }) => {
         const invalidEmployeeId = crypto.randomUUID();
         const updatedData = {
             id: invalidEmployeeId,
@@ -126,5 +127,25 @@ test.describe('API Negative Test Suite', () => {
         expect(response.status()).toBe(400);
         const responseBody = await response.text();
         expect(responseBody).toBe('');
+    });
+    test.only('Create employee with invalid first name', async ({ request }) => {
+        const { firstMax } = dataSet;
+        const response = await request.post(baseUrl, {
+            data: {
+                firstName: firstMax.firstName,
+                lastName: firstMax.lastName,
+                dependants: firstMax.dependants
+            },
+            headers
+        });
+        const responseBody = await response.json();
+        expect(response.status()).toBe(firstMax.status);
+        expect(responseBody).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    errorMessage: firstMax.errorMessage
+                })
+            ])
+        );
     });
 });

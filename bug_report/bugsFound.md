@@ -648,7 +648,7 @@ The application allows CSV injection payloads to be entered into the First Name 
 
 **Description:**
 
-An error message on the front end when more than 50 characters are entered in the First Name or Last Name fields. Although the API call responds with an error indicating that the input is invalid, this error is not shown to the user on the front end. As a result, the record is not added to the employee table, and users receive no feedback on why their input was rejected.
+An error message is not displayed on the front end when more than 50 characters are entered in the First Name or Last Name fields. Although the API call responds with an error indicating that the input is invalid, this error is not shown to the user on the front end. As a result, the record is not added to the employee table, and users receive no feedback on why their input was rejected.
 
 **Steps to Reproduce:**
 
@@ -658,7 +658,7 @@ An error message on the front end when more than 50 characters are entered in th
 4. Enter a string with more than 50 characters (e.g., A very long name that exceeds fifty characters in length for testing purposes) in the First Name field.
 5. Enter a string with more than 50 characters in the Last Name field.
 6. Click the "Add" button.
-7. Observe that no error message is displayed and the record is added to the employee table.
+7. Observe that no error message is displayed and the record is not added to the employee table.
 
 **Expected Result:**
 
