@@ -1,5 +1,4 @@
 const { expect } = require('@playwright/test');
-const { uuidEmit } = require('uuid-timestamp');
 
 exports.AddEmployeePage = class AddEmployeePage {
     constructor(page) {
