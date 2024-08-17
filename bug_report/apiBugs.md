@@ -165,7 +165,7 @@ The salary value, which is supposed to be 52000 based on predefined rules, can b
 ![](APIBug5.gif)
 
 ---
-## Bug 6: Expiration date allowed in PUT requests..
+## Bug 6: Expiration date allowed in PUT requests.
 
 **Priority:** High
 
