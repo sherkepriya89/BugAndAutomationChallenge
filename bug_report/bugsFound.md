@@ -500,7 +500,7 @@ The "Cancel" button does not change color or provide any visual indication when 
 
 **Description:**
 
-When an incorrect username is submitted, the system responds with an HTTP ERROR 405 page instead of displaying a proper error message indicating that the username is invalid. This is different error than what it gives when the username is correct and password is incorrect. This behavior allows for potential security vulnerabilities:
+When an incorrect username is submitted, the system responds with an HTTP ERROR 405 page instead of displaying a proper error message indicating that the username is invalid. This is different error than what it gives when the username is correct and password is incorrect. Putting in Correct username and incorrect password can lead to user enumeration. This behavior allows for potential security vulnerabilities:
 
 Username Guessing: Because the application takes the user to another page for invalid usernames, an attacker can attempt to guess valid usernames by submitting various inputs. This process could lead to identifying valid usernames more easily.
 
@@ -766,7 +766,6 @@ The token is encoded in Base64, allowing straightforward decoding to access the 
 ![](Bug24.png)
 
 ---
-
 ## Bug 25: There is no limit or pagination available for the records in employee table.
 
 **Priority:** Medium
@@ -794,7 +793,6 @@ All records are displayed in the employee table without any pagination or record
 ![](Bug25.gif)
 
 ---
-
 ## Bug 26: HTML Injection Allowed in First Name and Last Name Fields.
 
 **Priority:** High
@@ -826,7 +824,6 @@ HTML code entered into the First Name and Last Name fields is allowed and may be
 ![](Bug26.gif)
 
 ---
-
 ## Bug 27: Clicking outside Add, Edit, or Delete window disappears the window
 
 **Priority:** Medium
