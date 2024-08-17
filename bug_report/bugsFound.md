@@ -497,9 +497,9 @@ The "Cancel" button does not change color or provide any visual indication when 
 
 **Description:**
 
-When an incorrect username is submitted, the system responds with an HTTP ERROR 405 page instead of displaying a proper error message indicating that the username is invalid. This is different error than what it gives when password is incorrect. This behavior allows for potential security vulnerabilities:
+When an incorrect username is submitted, the system responds with an HTTP ERROR 405 page instead of displaying a proper error message indicating that the username is invalid. This is different error than what it gives when the username is correct and password is incorrect. This behavior allows for potential security vulnerabilities:
 
-Username Guessing: Because the system does not provide specific feedback for invalid usernames, an attacker can attempt to guess valid usernames by submitting various inputs. This process could lead to identifying valid usernames more easily.
+Username Guessing: Because the application takes the user to another page for invalid usernames, an attacker can attempt to guess valid usernames by submitting various inputs. This process could lead to identifying valid usernames more easily.
 
 Brute Force Attacks: The lack of error messages for incorrect usernames enables attackers to use brute force methods to try multiple username and password combinations without immediate feedback, increasing the risk of unauthorized access.
 
