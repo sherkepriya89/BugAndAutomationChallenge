@@ -26,6 +26,8 @@ Below are the bugs found during testing:
 23. [Edit and Delete button not accessible through keyboard](#bug-23-edit-and-delete-button-not-accessible-through-keyboard)
 24. [The token is in Base 64 which can be easily decoded to get username and password](#bug-24-the-token-is-in-base-64-which-can-be-easily-decoded-to-get-username-and-password)
 25. [There is no limit or pagination available for the records in employee table.](#bug-25-there-is-no-limit-or-pagination-available-for-the-records-in-employee-table)
+26. [HTML Injection Allowed in First Name and Last Name Fields](#bug-26-html-injection-allowed-in-first-name-and-last-name-fields)
+27. [Clicking Outside Add, Edit, or Delete Window Disappears the Window](#bug-27-clicking-outside-add-edit-or-delete-window-disappears-the-window)
 
 ---
 ## Bug 1: First Name and Last Name are incorrectly displayed
@@ -790,6 +792,68 @@ All records are displayed in the employee table without any pagination or record
 **Attachments:**
 
 ![](Bug25.gif)
+
+---
+
+## Bug 26: HTML Injection Allowed in First Name and Last Name Fields.
+
+**Priority:** High
+
+**Description:**
+
+The First Name and Last Name input fields on the employee form do not properly sanitize user input, allowing HTML code to be injected. This could potentially lead to security issues such as unintended rendering of HTML content and is able to inject arbitrary HTML code into a vulnerable paramters First and Last names in the application.
+
+**Steps to Reproduce:**
+
+1. NNavigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+2. Log in with valid credentials.
+3. Click on the "Add Employee" button.
+4. Enter `"><a href="https://google.com">Click me</a>` in the First Name and Last Name fields.
+5. Enter a number less than 32 or more than 0 in the Dependents field.
+6. Click the "Add" button.
+7. The first name and the last name in the employees table are vulnerable to html injection.
+
+**Expected Result:**
+
+HTML input should be properly sanitized and escaped in both the First Name and Last Name fields to prevent injection attacks and ensure that HTML code is not rendered or executed.
+
+**Actual Result:**
+
+HTML code entered into the First Name and Last Name fields is allowed and may be rendered or executed, leading to potential security risks.
+
+**Attachments:**
+
+![](Bug26.gif)
+
+---
+
+## Bug 27: Clicking outside Add, Edit, or Delete window disappears the window
+
+**Priority:** Medium
+
+**Description:**
+
+When a user clicks outside the Add, Edit, or Delete window, the window disappears unexpectedly. 
+
+**Steps to Reproduce:**
+
+1. NNavigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
+2. Log in with valid credentials.
+3. Click on the "Add Employee" button.
+4. Click outside the window.
+5. The window disappears.
+
+**Expected Result:**
+
+The window should remain open and visible, allowing the user to continue interacting with it.
+
+**Actual Result:**
+
+The window disappears when clicking outside of it.
+
+**Attachments:**
+
+![](Bug27.gif)
 
 ---
 
