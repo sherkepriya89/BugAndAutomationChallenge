@@ -38,8 +38,7 @@ exports.LoginPage = class LoginPage {
     }
 
     async loginPageError(text) {
-        await this.error.waitFor({ state: 'visible' });
-        expect(await this.error).toHaveText(text);
+        await expect(this.error).toHaveText(text);
     }
 
 }

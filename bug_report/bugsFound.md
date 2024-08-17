@@ -442,18 +442,18 @@ When the application is open in two separate tabs or browsers, deleting a record
 3. In the first tab, navigate to the record you want to delete.
 4. Delete the record.
 5. In the second tab, navigate to the same record that was deleted.
-6. Without refreshing the second tab, attempt to update the record (e.g., modify salary or other fields).
+6. Without refreshing the second tab, attempt to update the record.
 7. Save the changes.
 
 **Expected Result:**
 
 The application should reflect the deletion of the record across all tabs or browsers.
 Attempting to update a deleted record should result in an appropriate error message or prevent the update from being saved.
-The update operation should not save with incorrect values like 0 salary and gross pay.
+The update operation should not save with incorrect values like 0 salary.
 
 **Actual Result:**
 
-Updating the deleted record in the second tab results in saving incorrect values (0 salary and gross pay) because the record no longer exists.
+Updating the deleted record in the second tab results in saving incorrect values (0 salary).Once we refresh the tab on which the record was deleted, the record shows up again with 0 salary.
 No error message is shown, and the application allows the update with these incorrect values.
 
 **Attachments:**
@@ -461,13 +461,13 @@ No error message is shown, and the application allows the update with these inco
 ![](Bug14.gif)
 
 ---
-## Bug 15: Cancel button color does not change on hover (Unlike Add , Update and Delete buttons)
+## Bug 15: Cancel button color does not change on hover (Unlike Add , Edit and Delete buttons)
 
 **Priority:** Low
 
 **Description:**
 
-The "Cancel" button on the "Add Employee," "Update Employee," and "Delete Employee" windows does not change color when hovered over, which is inconsistent with expected UI behavior. Typically, buttons provide visual feedback (such as color changes) when hovered over, signaling to the user that the button is interactive. The lack of this expected response affects the user experience by not clearly indicating the button's interactivity.
+The "Cancel" button on the "Add Employee," "Edit Employee," and "Delete Employee" windows does not change color when hovered over, which is inconsistent with expected UI behavior. Typically, buttons provide visual feedback (such as color changes) when hovered over, signaling to the user that the button is interactive. The lack of this expected response affects the user experience by not clearly indicating the button's interactivity.
 
 **Steps to Reproduce:**
 
@@ -583,7 +583,7 @@ The system allows continuous login attempts with no limit or protective measures
 The application allows Stored Cross-Site Scripting (XSS) attacks via the First Name and Last Name fields, leading to potential security vulnerabilities.
 
 This occurs when the malicious code is saved on the server (e.g., in a database) and then served to other users when they load the page. In this case, the malicious code would be stored and executed whenever someone views the affected content.
-For example: <img src=asd onerror=alert(location)>
+For example: `<img src=asd onerror=alert(location)>`
 In the given example, , the onerror attribute is used to trigger a JavaScript alert if the image fails to load (since src=asd is likely not a valid image URL). The alert(location) part executes JavaScript code that shows the current URL of the page, demonstrating how an attacker can exploit this vulnerability to execute arbitrary JavaScript in the user's browser.
 
 **Steps to Reproduce:**
@@ -591,7 +591,7 @@ In the given example, , the onerror attribute is used to trigger a JavaScript al
 1. Navigate to <https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/Login>
 2. Log in with valid credentials.
 3. Click on the "Add Employee" button.
-4. Enter <img src=asd onerror=alert(location)> in the First Name and Last Name fields.
+4. Enter `<img src=asd onerror=alert(location)>` in the First Name and Last Name fields.
 5. Enter a number less than 32 or more than 0 in the Dependents field.
 6. Click the "Add" button.
 7. Click Log out.
@@ -600,7 +600,7 @@ In the given example, , the onerror attribute is used to trigger a JavaScript al
 
 **Expected Result:**
 
-The application should sanitize and escape input fields to prevent any script execution. Malicious scripts should not be executed or stored.
+The application should sanitize and escape input fields to prevent any script execution. Malicious payloads should not be stored and executed.
 
 **Actual Result:**
 

@@ -43,7 +43,4 @@ test.describe('Login Test Suite', () => {
 
   });
 
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
 });
